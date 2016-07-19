@@ -13,8 +13,21 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.levan.wordsgame.backClasses.Lexicon;
+import com.example.levan.wordsgame.backClasses.MyLexicon;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    public int k=0;
+    ArrayList<String> arr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +53,63 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+       // MyLexicon l = new MyLexicon();
+        //l.InitializeLexicon(this);
+        //System.out.print("done init");
+        //System.out.println(l.isWord("Steri"));
+        //System.out.println(l.startsWith("cici"));
+        //System.out.println(l.startsWith("gadage"));
+        //System.out.println(l.startsWith("ck"));
+        long st=new Date().getTime();
+        System.out.println("start "+ st);
+        permutate("","qwsdfrt");
+        long end=new Date().getTime();
+        System.out.println("end "+(end-st));
+
+
+
+
+    }
+
+    private void readLex(Lexicon lex) {
+        InputStream is=null;
+        arr=new ArrayList<>();
+        try {
+            System.out.println("start reading "+new Date().getTime());
+            is = this.getResources().openRawResource(this.getResources().getIdentifier("words",
+                    "raw", this.getPackageName()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            while((line=reader.readLine()) !=null)
+                arr.add(line);
+
+        } catch (IOException e) {
+            System.out.println( e.getStackTrace());
+            System.out.println("shiiiiiiiit");
+
+        }finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("end reading "+new Date().getTime());
+
+    }
+
+    private void permutate(String prefix,String str) {
+        int n = str.length();
+        System.out.println(prefix);
+        if (n == 0) ;
+        else {
+            for (int i = 0; i < n; i++) {
+                k += 1;
+                permutate(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n));
+            }
+        }
     }
 
     @Override
@@ -93,7 +163,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_send) {
 
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

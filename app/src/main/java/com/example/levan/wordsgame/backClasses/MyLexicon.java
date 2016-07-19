@@ -1,5 +1,13 @@
 package com.example.levan.wordsgame.backClasses;
 
+import android.content.Context;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
@@ -8,6 +16,7 @@ import java.util.List;
  */
 public class MyLexicon {
 
+    private int wordsN=0;
     private  LexiconStructure lexiconRoot;
 
     public  MyLexicon(){
@@ -15,33 +24,72 @@ public class MyLexicon {
 
     }
 
-    public MyLexicon InitializeLexicon(List<String> words){
 
-        for(int i=0;i<words.size();i++){
-            LexiconStructure curRoot=lexiconRoot;
-            String curWord=words.get(i);
-            for(int j=0;j<curWord.length();i++){
-                LexiconStructure curStructure;
+    public void addWord(String str){
+        LexiconStructure curRoot=lexiconRoot;
+        String curWord=str;
+        for(int j=0;j<curWord.length();j++){
+            LexiconStructure curStructure;
+            if(j==curWord.length()-1){
+                curStructure=new LexiconStructure(j+1,curWord.charAt(j),true);
+                wordsN=wordsN+1;
+            }else {
+                curStructure=new LexiconStructure(j+1,curWord.charAt(j),false);
+            }
+
+            if(!curRoot.contains(curStructure)){
+                curRoot.addChild(curStructure);
+                curRoot=curStructure;
+            }else {
+                curRoot=curRoot.getChild(curStructure.hashCode());
                 if(j==curWord.length()-1){
-                     curStructure=new LexiconStructure(j+1,curWord.charAt(j),true);
-                }else {
-                     curStructure=new LexiconStructure(j+1,curWord.charAt(j),false);
+                    curRoot.setWord(curStructure.isWord());
+                    wordsN=wordsN+1;
                 }
 
-                if(!curRoot.contains(curStructure)){
-                    curRoot.addChild(curStructure);
-                    curRoot=curStructure;
-                }else {
-                    curRoot=curRoot.getChild(curStructure.hashCode());
-                    curRoot.setWord(curStructure.isWord());
-                }
 
             }
 
 
         }
 
+        System.out.println("words  "+wordsN);
+
+
+    }
+
+    public MyLexicon InitializeLexicon(Context context){
+       readDictionary(context);
         return this;
+    }
+
+    private void readDictionary(Context context) {
+        InputStream is=null;
+        try {
+            System.out.println("start reading "+new Date().getTime());
+            is = context.getResources().openRawResource(context.getResources().getIdentifier("words",
+                    "raw", context.getPackageName()));
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+            String line;
+
+            for(int i=0;i<100000;i++)
+                addWord(reader.readLine());
+
+        } catch (IOException e) {
+            System.out.println( e.getStackTrace());
+            System.out.println("shiiiiiiiit");
+
+        }finally {
+            try {
+                is.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        System.out.println("end reading "+new Date().getTime());
+
+
+
     }
 
     public boolean startsWith(String word){

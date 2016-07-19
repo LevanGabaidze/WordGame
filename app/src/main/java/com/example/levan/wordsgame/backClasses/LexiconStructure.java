@@ -16,7 +16,7 @@ public class LexiconStructure {
         this.depth=depth;
         this.character=character;
         this.isWord=isWord;
-        childs=new HashMap<>();
+        childs=new HashMap<Integer, LexiconStructure>();
     }
 
 
@@ -36,7 +36,7 @@ public class LexiconStructure {
         this.isWord=isWord;
 
     }
-    public LexiconStructure getChild(int key) {
+    public LexiconStructure getChild(Integer key) {
         return childs.get(key);
     }
 
