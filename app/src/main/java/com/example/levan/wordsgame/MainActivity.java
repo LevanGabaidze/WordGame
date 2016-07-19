@@ -54,18 +54,18 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       // MyLexicon l = new MyLexicon();
-        //l.InitializeLexicon(this);
-        //System.out.print("done init");
-        //System.out.println(l.isWord("Steri"));
-        //System.out.println(l.startsWith("cici"));
-        //System.out.println(l.startsWith("gadage"));
-        //System.out.println(l.startsWith("ck"));
-        long st=new Date().getTime();
-        System.out.println("start "+ st);
-        permutate("","qwsdfrt");
-        long end=new Date().getTime();
-        System.out.println("end "+(end-st));
+        MyLexicon l = new MyLexicon();
+        l.InitializeLexicon(this);
+        System.out.print("done init");
+        System.out.println(l.isWord("Steri"));
+        System.out.println(l.startsWith("cici"));
+        System.out.println(l.startsWith("gadage"));
+        System.out.println(l.startsWith("ck"));
+     //   long st=new Date().getTime();
+       // System.out.println("start "+ st);
+        //permutate("","qwsdfrt");
+        //long end=new Date().getTime();
+        //System.out.println("end "+(end-st));
 
 
 

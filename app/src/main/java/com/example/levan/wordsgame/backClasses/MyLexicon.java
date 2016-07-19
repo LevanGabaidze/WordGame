@@ -53,7 +53,7 @@ public class MyLexicon {
 
         }
 
-        System.out.println("words  "+wordsN);
+
 
 
     }
@@ -72,8 +72,8 @@ public class MyLexicon {
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line;
 
-            for(int i=0;i<100000;i++)
-                addWord(reader.readLine());
+            while((line=reader.readLine())!=null)
+                addWord(line);
 
         } catch (IOException e) {
             System.out.println( e.getStackTrace());
@@ -81,6 +81,7 @@ public class MyLexicon {
 
         }finally {
             try {
+                System.out.println("words  "+wordsN);
                 is.close();
             } catch (IOException e) {
                 e.printStackTrace();
