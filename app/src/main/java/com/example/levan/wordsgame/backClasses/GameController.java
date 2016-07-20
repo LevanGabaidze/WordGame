@@ -19,7 +19,6 @@ public class GameController  extends Thread {
 
 
 
-
     public void GameController(int nPlayer, ArrayList<Player> players){
         this.players=players;
         this.nPlayer=nPlayer;
@@ -29,7 +28,18 @@ public class GameController  extends Thread {
         bidRisen=new boolean[nPlayer+1];
     }
 
+    @Override
+    public void run() {
+        super.run();
+        while(true){
 
+
+        }
+
+
+    }
+
+    //am metods izaxebs da tan romeli playeria eubneba da tan awyobil strings azlevs
     public synchronized void   setAnswer(int player,String answer){
         if((new Date().getTime()-staredWaiting)>40000)
             return;
@@ -39,13 +49,16 @@ public class GameController  extends Thread {
 
     }
 
-
+   //es metodi unda gamoizaxos playerma an tvinma roca kitxavs gamecontrolleri xo ar ginda awioo,rigirigobit ekitxeba ra tipebs
     public synchronized void   riseBid(int player){
         if((new Date().getTime()-staredWaiting)>10000)
             return;
         bidRisen[player]=true;
     }
 
+
+
+    //es metodi unda gamoizaxos playerma an tvinma roca mesigs daichers rom vigacam awia da shen ra shvrebio
     public synchronized void   acceptBid(int player){
         if((new Date().getTime()-staredWaiting)>10000)
             return;
