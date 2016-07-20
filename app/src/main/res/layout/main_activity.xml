@@ -1,6 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
+    <ViewAnimator
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/animator">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/loading_scene"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="30dp"
+                android:layout_gravity="center"
+                android:src="@drawable/title"/>
+
+            <com.github.rahatarmanahmed.cpv.CircularProgressView
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/progress_view"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                app:cpv_animAutostart="true"
+                app:cpv_indeterminate="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <Button
+                android:layout_width="@dimen/button_w"
+                android:layout_height="@dimen/button_h"
+                android:id="@+id/start_play"
+                android:text="Play"
+                android:layout_margin="@dimen/medium_margin"
+                />
+
+            <Button
+                android:layout_width="@dimen/button_w"
+                android:layout_height="@dimen/button_h"
+                android:id="@+id/multiPlayer"
+                android:text="MultyPlayer"
+                android:layout_margin="@dimen/medium_margin"/>
+
+        </LinearLayout>
+
+
+    </ViewAnimator>
+
+
+
+
 
 </LinearLayout>
