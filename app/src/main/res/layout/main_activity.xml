@@ -42,7 +42,10 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center">
 
 
             <Button
@@ -59,6 +62,14 @@
                 android:id="@+id/multiPlayer"
                 android:text="MultyPlayer"
                 android:layout_margin="@dimen/medium_margin"/>
+
+            <Button
+                android:layout_width="@dimen/button_w"
+                android:layout_height="@dimen/button_h"
+                android:id="@+id/btn_exit"
+                android:text="Exit"
+                android:layout_margin="@dimen/medium_margin"/>
+
 
         </LinearLayout>
 
