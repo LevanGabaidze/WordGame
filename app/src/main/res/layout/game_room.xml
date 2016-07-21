@@ -82,9 +82,17 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@drawable/table"
+        android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingTop="70dp"
         android:orientation="horizontal"
         android:gravity="center"
-        android:background="@drawable/table"
+
         android:layout_weight="1"
         >
         <TextView
@@ -94,7 +102,7 @@
             android:layout_margin="@dimen/medium_margin"
             android:layout_gravity="center"
             android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
+            android:background="@drawable/card_back"
             android:textAlignment="center"
             android:text="s"
             />
@@ -169,6 +177,42 @@
             android:textAlignment="center"
             android:text="s"
             />
+    </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:paddingBottom="@dimen/medium_margin"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="@dimen/card_w"
+                android:layout_height="@dimen/card_l"
+                android:id="@+id/card8"
+                android:layout_margin="@dimen/small_margin"
+                android:layout_gravity="center"
+                android:textSize="@dimen/cardfontsize"
+                android:background="@android:color/white"
+                android:textAlignment="center"
+                android:text="s"
+                />
+
+            <TextView
+                android:layout_width="@dimen/card_w"
+                android:layout_height="@dimen/card_l"
+                android:id="@+id/card9"
+                android:layout_margin="@dimen/small_margin"
+                android:layout_gravity="center"
+                android:textSize="@dimen/cardfontsize"
+                android:background="@android:color/white"
+                android:textAlignment="center"
+                android:text="s"
+                />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
     <LinearLayout
