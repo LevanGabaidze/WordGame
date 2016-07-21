@@ -28,6 +28,8 @@ public class GameController  extends Thread {
     private boolean[] bidRisen;
     private boolean[] riseAccepted;
     private long staredWaiting;
+    private boolean[] acceptCall;
+    private boolean[] acceptRise;
     private Date now;
     private int turnTorise;
     private int turnToAcceptRise;
@@ -35,6 +37,7 @@ public class GameController  extends Thread {
     private  boolean gameFinished;
     private Handler mainPlayerHandler;
     private Set<Integer> playersOut;
+    private int curHand;
 
 
 
@@ -48,6 +51,8 @@ public class GameController  extends Thread {
         response=new String[nPlayer+1];
         riseAccepted=new boolean[nPlayer+1];
         bidRisen=new boolean[nPlayer+1];
+        acceptCall=new boolean[nPlayer+1];
+        acceptRise=new boolean[nPlayer+1];
         now=new Date();
         turnTorise=0;
         turnToAcceptRise=1;
@@ -57,6 +62,7 @@ public class GameController  extends Thread {
         Collections.shuffle(cards);
         dealtCards=new ArrayList<>();
         playersOut=new HashSet<>();
+        curHand=0;
     }
 
     @Override
@@ -73,7 +79,7 @@ public class GameController  extends Thread {
                 return;
 
             }
-
+            curHand+=1;
         }
 
 
@@ -83,9 +89,49 @@ public class GameController  extends Thread {
     }
 
     private void evaluateResult() {
+        ArrayList<Integer> values=new ArrayList<>();
+        ArrayList<Integer> winnerId;
+        int value=0;
+        int maxValue=0;
+        ArrayList<String > words=new ArrayList<>();
+        for(int i=0;i<response.length;i++){
+            if(responseGiven[i]){
+                value=DataStore.evaluate(response[i]);
+                values.add(value);
+                words.add(response[i]);
+            }else{
+                if(playersOut.contains(i)){
+                    words.add(null);
+                }
+                values.add(0);
+            }
+        }
+
+
     }
 
     private void askToAcceptRise() {
+        long lastSend;
+        for(int i=0;i<nPlayer+1;i++){
+            if(playersOut.contains(i) || bidRisen[i]==true ) continue;
+            Message ms=new Message();
+            ms.getData().putString(DataStore.requestTypeFlag,DataStore.askToAccetptRise);
+            if(i==0){
+                mainPlayerHandler.sendMessage(ms);
+                lastSend=now.getTime();
+            }else {
+                players.get(i-1).getmHanlder().sendMessage(ms);
+                lastSend=now.getTime();
+            }
+            acceptCall[i]=true;
+            while((now.getTime()-lastSend)<15000){
+                if(riseAccepted[i]) break;
+            }
+            acceptCall[i]=false;
+
+        }
+
+
     }
 
     private void suggestRise() {
@@ -103,13 +149,17 @@ public class GameController  extends Thread {
                     players.get(i-1).getmHanlder().sendMessage(ms);
                     lastSend=now.getTime();
                 }
+                acceptRise[i]=true;
                 while((now.getTime()-lastSend)<15000){
                     if(alreadyRised) return;
                 }
+                acceptRise[i]=false;
+
 
             }
 
-
+            turnTorise+=1;
+            turnTorise=turnTorise%(nPlayer+1);
         }
 
     }
@@ -191,7 +241,7 @@ public class GameController  extends Thread {
 
    //es metodi unda gamoizaxos playerma an tvinma roca kitxavs gamecontrolleri xo ar ginda awioo,rigirigobit ekitxeba ra tipebs
     public synchronized void   riseBid(int player){
-        if((new Date().getTime()-staredWaiting)>10000)
+        if(!acceptRise[player])
             return;
         bidRisen[player]=true;
         alreadyRised=true;
@@ -201,7 +251,7 @@ public class GameController  extends Thread {
 
     //es metodi unda gamoizaxos playerma an tvinma roca mesigs daichers rom vigacam awia da shen ra shvrebio
     public synchronized void   acceptBid(int player){
-        if((new Date().getTime()-staredWaiting)>10000)
+        if(!acceptCall[player])
             return;
         riseAccepted[player]=true;
     }

@@ -20,12 +20,24 @@ public class DataStore {
     public final static  int Card_Number=5;
 
     public final static int startMoney=100;
+    public final static int[] bidSequence= new int[]{10,20,30,40,50};
+
 
 
 
     public  static int getValue(Character ch){
 
         return 0;
+    }
+
+    public static int evaluate(String str){
+        int value=0;
+        for(int i=0;i<str.length();i++){
+            value+=DataStore.getValue(str.charAt(i));
+        }
+        return  value;
+
+
     }
 
 }
