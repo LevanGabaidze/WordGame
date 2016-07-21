@@ -38,8 +38,6 @@ public class Player extends Thread {
                     case DataStore.askToAccetptRise: acceptRise(); break;
                     default: break;
                 }
-
-
             }
         } ;
 
@@ -65,6 +63,7 @@ public class Player extends Thread {
 
     private void giveAnswer(String str) {
         String answer=ai.getWord(str);
+        gm.setAnswer(myNumber,answer);
     }
 
     public void setMoney(int mo){

@@ -6,6 +6,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
@@ -14,7 +15,7 @@ import java.util.List;
 /**
  * Created by levan on 7/18/2016.
  */
-public class MyLexicon {
+public class MyLexicon implements Serializable {
 
     private int wordsN=0;
     private  LexiconStructure lexiconRoot;

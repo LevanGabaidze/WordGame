@@ -3,6 +3,115 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="action_settings">Settings</string>
+    <string-array
+        name="characters_array">
+        <item>h</item>
+        <item>J</item>
+        <item>j</item>
+        <item>y</item>
+        <item>p</item>
+        <item>f</item>
+        <item>q</item>
+        <item>w</item>
+        <item>W</item>
+        <item>z</item>
+        <item>Z</item>
+        <item>x</item>
+        <item>k</item>
+        <item>c</item>
+        <item>C</item>
+        <item>g</item>
+        <item>u</item>
+        <item>v</item>
+        <item>d</item>
+        <item>l</item>
+        <item>b</item>
+        <item>T</item>
+        <item>t</item>
+        <item>m</item>
+        <item>n</item>
+        <item>o</item>
+        <item>r</item>
+        <item>R</item>
+        <item>s</item>
+        <item>S</item>
+        <item>e</item>
+        <item>i</item>
+        <item>a</item>
+    </string-array>
+
+    <integer-array name="values">
+        <item>10</item>
+        <item>10</item>
+        <item>9</item>
+        <item>9</item>
+        <item>9</item>
+        <item>8</item>
+        <item>8</item>
+        <item>8</item>
+        <item>7</item>
+        <item>7</item>
+        <item>7</item>
+        <item>7</item>
+        <item>6</item>
+        <item>6</item>
+        <item>6</item>
+        <item>6</item>
+        <item>5</item>
+        <item>5</item>
+        <item>5</item>
+        <item>4</item>
+        <item>4</item>
+        <item>4</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>2</item>
+        <item>2</item>
+        <item>2</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+    </integer-array>
+
+    <integer-array name="frequency">
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>1</item>
+        <item>2</item>
+        <item>2</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>3</item>
+        <item>4</item>
+        <item>3</item>
+        <item>4</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>9</item>
+    </integer-array>
+
+
 </resources>

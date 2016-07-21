@@ -1,5 +1,6 @@
 package com.example.levan.wordsgame;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -41,7 +42,14 @@ public class MainActivity extends AppCompatActivity {
         load.startAnimation();
         an.showNext();
 
-        MyLexicon l = new MyLexicon();
+        final MyLexicon  l = new MyLexicon();
+        final Context c=this;
+        Thread wokr=new Thread(new Runnable() {
+            @Override
+            public void run() {
+                l.InitializeLexicon(c);
+            }
+        });
         l.InitializeLexicon(this);
         System.out.print("done init");
         System.out.println(l.isWord("Steri"));
@@ -55,8 +63,9 @@ public class MainActivity extends AppCompatActivity {
         //System.out.println("end "+(end-st));
 
         Intent in = new Intent(this,RoomActivity.class);
+        in.putExtra("lex",l);
         startActivity(in);
-
+        this.finish();
 
     }
 

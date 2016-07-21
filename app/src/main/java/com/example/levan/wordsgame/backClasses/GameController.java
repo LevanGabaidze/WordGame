@@ -63,6 +63,8 @@ public class GameController  extends Thread {
         dealtCards=new ArrayList<>();
         playersOut=new HashSet<>();
         curHand=0;
+        cards=DataStore.getDasta();
+
     }
 
     @Override
@@ -77,11 +79,9 @@ public class GameController  extends Thread {
             if(gameFinished){
                 msgUItofinish();
                 return;
-
             }
             curHand+=1;
         }
-
 
     }
 
@@ -173,7 +173,7 @@ public class GameController  extends Thread {
         }
         for(int i=0;i<DataStore.Card_Number;i++){
             dealtCards.add(cards.get(0));
-            curCards+=cards.get(0);
+            curCards+=cards.get(0).getCharacter();
             cards.remove(0);
         }
 
@@ -181,7 +181,7 @@ public class GameController  extends Thread {
         String mPlayerHand="";
         for(int j=0; j<2;j++){
             dealtCards.add(cards.get(0));
-            mPlayerHand+=cards.get(0);
+            mPlayerHand+=cards.get(0).getCharacter();
             cards.remove(0);
         }
         Message msgTomainActivity= new Message();
