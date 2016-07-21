@@ -94,6 +94,7 @@ public class MyLexicon {
     }
 
     public boolean startsWith(String word){
+        if(word.equals("")) return  true;
         LexiconStructure curRoot=lexiconRoot;
         for(int i=0;i<word.length();i++){
             LexiconStructure curStruc=new LexiconStructure(i+1,word.charAt(i),false);

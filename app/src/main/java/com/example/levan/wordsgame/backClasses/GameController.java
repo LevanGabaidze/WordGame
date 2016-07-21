@@ -1,5 +1,7 @@
 package com.example.levan.wordsgame.backClasses;
 
+import android.os.Handler;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,27 +18,82 @@ public class GameController  extends Thread {
     private boolean[] bidRisen;
     private boolean[] riseAccepted;
     private long staredWaiting;
+    private Date now;
+    private int turnTorise;
+    private int turnToAcceptRise;
+    private boolean alreadyRised;
+    private  boolean gameFinished;
+    private Handler mainPlayerHandler;
 
 
 
-    public void GameController(int nPlayer, ArrayList<Player> players){
+
+    public void GameController(int nPlayer, ArrayList<Player> players, Handler mainPlayerHandler){
         this.players=players;
         this.nPlayer=nPlayer;
         responseGiven=new boolean[nPlayer+1];
         response=new String[nPlayer+1];
         riseAccepted=new boolean[nPlayer+1];
         bidRisen=new boolean[nPlayer+1];
+        now=new Date();
+        turnTorise=0;
+        turnToAcceptRise=1;
+        alreadyRised=false;
+        gameFinished=false;
+        this.mainPlayerHandler=mainPlayerHandler;
     }
 
     @Override
     public void run() {
         super.run();
         while(true){
+            dealCards();
+            //amomwebs dro xo ar gavida an yvelam xo ar gasca pasuxi da tu romelime shesrulda momdevno etapze gadadis
+            while((now.getTime()-staredWaiting)<=40000){
+                boolean cheker=true;
+                for(int i=0;i<responseGiven.length;i++){
+                    cheker=(cheker&&responseGiven[i]);
+
+                }
+                if(cheker) break;
+            }
+
+            for(int i=0;i<nPlayer;i++){
+                suggestRise();
+                if(alreadyRised) break;
+            }
+
+            askToAcceptRise();
+
+            evaliateResult();
+            if(gameFinished){
+                msgUItofinish();
+                return;
+
+            }
+
+
 
 
         }
 
 
+    }
+
+    private void msgUItofinish() {
+    }
+
+    private void evaliateResult() {
+    }
+
+    private void askToAcceptRise() {
+    }
+
+    private void suggestRise() {
+    }
+
+    private void dealCards() {
+        staredWaiting=now.getTime();
     }
 
     //am metods izaxebs da tan romeli playeria eubneba da tan awyobil strings azlevs
