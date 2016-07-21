@@ -32,14 +32,10 @@ public class OriginalAI {
         String choice=choose();
         return choice;
     }
-
     private String choose() {
         if(words.size()==0) return "";
         Collections.sort(words);
-        int max=words.size()/2;
-        int min=0;
-        Random ra=new Random();
-        int choice=ra.nextInt((max-min)+1) +min;
+        int choice=getRandomNumber(words.size());
         return words.get(choice).str;
     }
 
@@ -72,6 +68,29 @@ public class OriginalAI {
 
         return  value;
     }
+    //override
+    public boolean riseOrNot(){
+        Random ra=new Random();
+        int choice=ra.nextInt((10-0)+1);
+
+        return choice<3;
+    }
+    //to override
+    public boolean acceptRise(){
+        Random ra=new Random();
+        int choice=ra.nextInt((10-0)+1);
+        return choice<8;
+    }
+
+    public int getRandomNumber(int n) {
+        int max=n/2;
+        int min=0;
+        Random ra=new Random();
+        int choice=ra.nextInt((max-min)+1) +min;
+
+        return choice;
+    }
+
 
     private class  Word implements  Comparable{
         String str;

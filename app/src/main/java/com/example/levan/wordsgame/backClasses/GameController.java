@@ -1,9 +1,16 @@
 package com.example.levan.wordsgame.backClasses;
 
 import android.os.Handler;
+import android.os.Message;
+import android.provider.ContactsContract;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Random;
+import java.util.Set;
 
 /**
  * Created by levan on 7/19/2016.
@@ -12,6 +19,9 @@ public class GameController  extends Thread {
 
 
     private ArrayList<Player> players;
+    private ArrayList<Card> cards;
+    private ArrayList<Card> dealtCards;
+
     private int nPlayer;
     private boolean[] responseGiven;
     private String[] response;
@@ -24,6 +34,9 @@ public class GameController  extends Thread {
     private boolean alreadyRised;
     private  boolean gameFinished;
     private Handler mainPlayerHandler;
+    private Set<Integer> playersOut;
+
+
 
 
 
@@ -41,39 +54,25 @@ public class GameController  extends Thread {
         alreadyRised=false;
         gameFinished=false;
         this.mainPlayerHandler=mainPlayerHandler;
+        Collections.shuffle(cards);
+        dealtCards=new ArrayList<>();
+        playersOut=new HashSet<>();
     }
 
     @Override
     public void run() {
         super.run();
         while(true){
+            dealtCards.clear();
             dealCards();
-            //amomwebs dro xo ar gavida an yvelam xo ar gasca pasuxi da tu romelime shesrulda momdevno etapze gadadis
-            while((now.getTime()-staredWaiting)<=40000){
-                boolean cheker=true;
-                for(int i=0;i<responseGiven.length;i++){
-                    cheker=(cheker&&responseGiven[i]);
-
-                }
-                if(cheker) break;
-            }
-
-            for(int i=0;i<nPlayer;i++){
-                suggestRise();
-                if(alreadyRised) break;
-            }
-
+            suggestRise();
             askToAcceptRise();
-
-            evaliateResult();
+            evaluateResult();
             if(gameFinished){
                 msgUItofinish();
                 return;
 
             }
-
-
-
 
         }
 
@@ -83,17 +82,101 @@ public class GameController  extends Thread {
     private void msgUItofinish() {
     }
 
-    private void evaliateResult() {
+    private void evaluateResult() {
     }
 
     private void askToAcceptRise() {
     }
 
     private void suggestRise() {
+        long lastSend;
+        alreadyRised=false;
+        for(int i=0;i<nPlayer+1;i++){
+            if(playersOut.contains(i)) continue;
+            Message ms=new Message();
+            ms.getData().putString(DataStore.requestTypeFlag,DataStore.askRise);
+            if(turnTorise==i){
+                if(i==0) {
+                    mainPlayerHandler.sendMessage(ms);
+                    lastSend=now.getTime();
+                }else{
+                    players.get(i-1).getmHanlder().sendMessage(ms);
+                    lastSend=now.getTime();
+                }
+                while((now.getTime()-lastSend)<15000){
+                    if(alreadyRised) return;
+                }
+
+            }
+
+
+        }
+
     }
 
     private void dealCards() {
+        String curCards="";
+        if(cards.size()<(DataStore.Card_Number+2*(nPlayer-playersOut.size()+1))) {
+            gameFinished=true;
+            notifyNoMoreCards();
+            interrupt();
+        }
+        for(int i=0;i<DataStore.Card_Number;i++){
+            dealtCards.add(cards.get(0));
+            curCards+=cards.get(0);
+            cards.remove(0);
+        }
+
+       //deal to person
+        String mPlayerHand="";
+        for(int j=0; j<2;j++){
+            dealtCards.add(cards.get(0));
+            mPlayerHand+=cards.get(0);
+            cards.remove(0);
+        }
+        Message msgTomainActivity= new Message();
+        msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
+        msgTomainActivity.getData().putString(DataStore.commonCards,curCards);
+        msgTomainActivity.getData().putString(DataStore.playerCards,mPlayerHand);
+        mainPlayerHandler.sendMessage(msgTomainActivity);
+
+        //deal to computer
+        for(int i=0;i<nPlayer;i++){
+            String cardsTosend="";
+            cardsTosend+=curCards;
+            if(playersOut.contains(i+1)) continue;
+            for(int j=0; j<2;j++){
+                dealtCards.add(cards.get(0));
+                cardsTosend+=cards.get(0);
+                cards.remove(0);
+            }
+            Message ms=new Message();
+            ms.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
+            ms.getData().putString(DataStore.sentStringKey,cardsTosend);
+            players.get(i).getmHanlder().sendMessage(ms);
+        }
+        waitForAnswers();
+
+    }
+
+    private void notifyNoMoreCards() {
+        Message msgTomainActivity= new Message();
+        msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.noMoreCards);
+
+        mainPlayerHandler.sendMessage(msgTomainActivity);
+    }
+
+    private void waitForAnswers() {
         staredWaiting=now.getTime();
+        //amomwebs dro xo ar gavida an yvelam xo ar gasca pasuxi da tu romelime shesrulda momdevno etapze gadadis
+        while((now.getTime()-staredWaiting)<=40000){
+            boolean cheker=true;
+            for(int i=0;i<responseGiven.length;i++){
+                cheker=(cheker&&responseGiven[i]);
+
+            }
+            if(cheker) break;
+        }
     }
 
     //am metods izaxebs da tan romeli playeria eubneba da tan awyobil strings azlevs
@@ -111,6 +194,7 @@ public class GameController  extends Thread {
         if((new Date().getTime()-staredWaiting)>10000)
             return;
         bidRisen[player]=true;
+        alreadyRised=true;
     }
 
 
