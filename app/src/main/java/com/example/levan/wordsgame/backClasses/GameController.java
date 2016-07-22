@@ -38,6 +38,8 @@ public class GameController  extends Thread {
     private Handler mainPlayerHandler;
     private Set<Integer> playersOut;
     private int curHand;
+    private int pot;
+    private int[] money;
 
 
 
@@ -53,6 +55,7 @@ public class GameController  extends Thread {
         bidRisen=new boolean[nPlayer+1];
         acceptCall=new boolean[nPlayer+1];
         acceptRise=new boolean[nPlayer+1];
+        money=new int[nPlayer+1];
         now=new Date();
         turnTorise=0;
         turnToAcceptRise=1;
@@ -64,23 +67,30 @@ public class GameController  extends Thread {
         playersOut=new HashSet<>();
         curHand=0;
         cards=DataStore.getDasta();
+        pot=0;
 
     }
 
     @Override
     public void run() {
         super.run();
+        for(int i=0;i<nPlayer+1;i++){
+            money[i]=DataStore.startMoney;
+        }
         while(true){
             dealtCards.clear();
+            pot=DataStore.bidSequence[curHand]*(nPlayer+1-playersOut.size());
             dealCards();
             suggestRise();
             askToAcceptRise();
+            if(curHand<4) curHand+=1;
             evaluateResult();
             if(gameFinished){
                 msgUItofinish();
                 return;
             }
-            curHand+=1;
+
+
         }
 
     }
@@ -89,25 +99,56 @@ public class GameController  extends Thread {
     }
 
     private void evaluateResult() {
-        ArrayList<Integer> values=new ArrayList<>();
-        ArrayList<Integer> winnerId;
-        int value=0;
-        int maxValue=0;
-        ArrayList<String > words=new ArrayList<>();
+        ArrayList<Integer> scores=getScores();
+        int maxScore=scores.get(scores.size()-1);
+        ArrayList<Integer> winners=getWinners(maxScore,scores);
+        GameResult gmr=new GameResult();
+        gmr.setScores(scores);
+        gmr.setWinners(winners);
+        ArrayList<String> words=new ArrayList<>();
         for(int i=0;i<response.length;i++){
-            if(responseGiven[i]){
-                value=DataStore.evaluate(response[i]);
-                values.add(value);
-                words.add(response[i]);
-            }else{
-                if(playersOut.contains(i)){
-                    words.add(null);
-                }
-                values.add(0);
+            words.add(response[i]);
+            response[i]=null;
+            responseGiven[i]=false;
+            riseAccepted[i]=false;
+            bidRisen[i]=false;
+        }
+        ArrayList<Integer> moneys=new ArrayList<>();
+
+        for(int i=0;i<money.length;i++){
+            moneys.add(money[i]);
+        }
+        gmr.setMoney(moneys);
+        gmr.setWords(words);
+        ArrayList<Integer> plNowOut=checkIfanyOneOut();
+        gmr.setPlayersNowOut(plNowOut);
+        Message mg=new Message();
+        mg.getData().putString(DataStore.requestTypeFlag,DataStore.gameResult);
+        mg.getData().putSerializable(DataStore.gameResult,gmr);
+
+
+    }
+
+    private ArrayList<Integer> checkIfanyOneOut() {
+        ArrayList<Integer> playersNowOut=new ArrayList<>();
+        for(int i=0;i<money[i];i++){
+            if(!players.contains(i) && money[i]<DataStore.bidSequence[curHand] ){
+                playersOut.add(i);
+                playersNowOut.add(i);
             }
         }
+        if((playersOut.size()==nPlayer+1)|| playersOut.contains(0)) gameFinished=true;
+        return  playersNowOut;
+    }
 
-
+    private ArrayList<Integer> getWinners(int maxScore, ArrayList<Integer> scores) {
+        ArrayList<Integer> winners=new ArrayList<>();
+        for(int i=0;i<scores.size()-1;i++){
+            if(scores.get(i)==maxScore){
+                winners.add(i);
+            }
+        }
+        return  winners;
     }
 
     private void askToAcceptRise() {
@@ -120,6 +161,11 @@ public class GameController  extends Thread {
                 mainPlayerHandler.sendMessage(ms);
                 lastSend=now.getTime();
             }else {
+                Message mg=new Message();
+                mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
+                mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIAksedToAcceptRise);
+                mg.getData().putInt(DataStore.messageToUIAksedToAcceptRise,i);
+                mainPlayerHandler.sendMessage(mg);
                 players.get(i-1).getmHanlder().sendMessage(ms);
                 lastSend=now.getTime();
             }
@@ -130,7 +176,6 @@ public class GameController  extends Thread {
             acceptCall[i]=false;
 
         }
-
 
     }
 
@@ -146,6 +191,11 @@ public class GameController  extends Thread {
                     mainPlayerHandler.sendMessage(ms);
                     lastSend=now.getTime();
                 }else{
+                    Message mg=new Message();
+                    mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
+                    mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIAksedToRise);
+                    mg.getData().putInt(DataStore.messageToUIAksedToRise,i);
+                    mainPlayerHandler.sendMessage(mg);
                     players.get(i-1).getmHanlder().sendMessage(ms);
                     lastSend=now.getTime();
                 }
@@ -172,17 +222,15 @@ public class GameController  extends Thread {
             interrupt();
         }
         for(int i=0;i<DataStore.Card_Number;i++){
-            dealtCards.add(cards.get(0));
-            curCards+=cards.get(0).getCharacter();
-            cards.remove(0);
+            dealtCards.add(cards.get(i));
+            curCards+=cards.get(i).getCharacter();
         }
 
        //deal to person
         String mPlayerHand="";
         for(int j=0; j<2;j++){
-            dealtCards.add(cards.get(0));
-            mPlayerHand+=cards.get(0).getCharacter();
-            cards.remove(0);
+            dealtCards.add(cards.get(j));
+            mPlayerHand+=cards.get(j).getCharacter();
         }
         Message msgTomainActivity= new Message();
         msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
@@ -196,9 +244,8 @@ public class GameController  extends Thread {
             cardsTosend+=curCards;
             if(playersOut.contains(i+1)) continue;
             for(int j=0; j<2;j++){
-                dealtCards.add(cards.get(0));
-                cardsTosend+=cards.get(0);
-                cards.remove(0);
+                dealtCards.add(cards.get(j));
+                cardsTosend+=cards.get(j).getCharacter();
             }
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
@@ -236,6 +283,7 @@ public class GameController  extends Thread {
 
         responseGiven[player]=true;
         response[player]=answer;
+        Message m=new Message();
 
     }
 
@@ -244,7 +292,13 @@ public class GameController  extends Thread {
         if(!acceptRise[player])
             return;
         bidRisen[player]=true;
+        riseAccepted[player]=true;
         alreadyRised=true;
+        Message mg=new Message();
+        mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
+        mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
+        mg.getData().putInt(DataStore.messageToUIRise,player);
+        pot+=10;
     }
 
 
@@ -254,9 +308,43 @@ public class GameController  extends Thread {
         if(!acceptCall[player])
             return;
         riseAccepted[player]=true;
+        Message mg=new Message();
+        mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
+        mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);
+        mg.getData().putInt(DataStore.messageToUIRiseCalled,player);
+        pot+=10;
+
     }
 
 
+    public ArrayList<Integer> getScores() {
+        ArrayList<Integer> winners=new ArrayList<>();
+        int max=0;
+        int value=0;
+        for(int i=0;i<response.length;i++){
+            if(!playersOut.contains(i)&& responseGiven[i]){
+                if((alreadyRised && riseAccepted[i])||!alreadyRised){
+                    value=DataStore.evaluate(response[i]);
+                    if(value>max) max=value;
+                    winners.add(value);
+
+                }else{
+                    winners.add(null);
+
+                }
+            }else {
+                winners.add(null);
+            }
+        }
+        //last integer is max
+        winners.add(max);
+        return winners;
+    }
 
 
+    public void setMoney(ArrayList<Integer> winners) {
+        for(int i=0;i<winners.size();i++){
+            money[i]+=pot/winners.size();
+        }
+    }
 }

@@ -12,11 +12,26 @@ import java.util.HashMap;
  * Created by levan on 7/21/2016.
  */
 public  class  DataStore {
-    public final static  String requestTypeFlag="requestType";
+
+    public final static String messageToUIAnswerGiven="answerGiven";
+    public final static String messageToUIRise="playerRised";
+    public final static String messageToUIRiseCalled="playerCalled";
+
+    public final static String messageToUICardsDealt="dealtAToPlayers";
+    public final static String messageToUIAksedToRise="arskedPlayerToRise";
+    public final static String messageToUIAksedToAcceptRise="askedPlayerToAcceptRise";
+
+
+
+    public final static String graphicRequest="graphicRequest";
+    public final static String gameResult="gameResult";
+
 
     public final static  String noMoreCards="noMoreCards";
     public final static  String commonCards="commonCards";
     public final static  String playerCards="playerCards";
+
+    public final static  String requestTypeFlag="requestType";
 
 
     public final static  String askAnswer="askForAnswer";
