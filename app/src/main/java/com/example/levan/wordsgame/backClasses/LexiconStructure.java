@@ -1,12 +1,13 @@
 package com.example.levan.wordsgame.backClasses;
 
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  * Created by levan on 7/18/2016.
  */
-public class LexiconStructure {
+public class LexiconStructure implements Serializable {
     private HashMap<Integer,LexiconStructure> childs;
     private int depth;
     private Character character;

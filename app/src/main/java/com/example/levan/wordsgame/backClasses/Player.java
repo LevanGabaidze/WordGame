@@ -15,11 +15,14 @@ public class Player extends Thread {
     private int myNumber;
 
 
-    public Player(GameController gm,OriginalAI ai,int playerNumber){
-        this.gm=gm;
+    public Player(OriginalAI ai,int playerNumber){
         this.ai=ai;
         money=DataStore.startMoney;
         this.myNumber=playerNumber;
+    }
+
+    public void setGamecontroller(GameController gm){
+        this.gm=gm;
     }
 
     @Override
@@ -52,12 +55,15 @@ public class Player extends Thread {
     private void acceptRise() {
         if(ai.acceptRise()){
             gm.acceptBid(myNumber);
+            setMoney( money-10);
+
         }
     }
 
     private void rise() {
         if(ai.riseOrNot()){
             gm.riseBid(myNumber);
+            setMoney(money-DataStore.bidSequence[gm.getCurrentRound()]);
         }
     }
 

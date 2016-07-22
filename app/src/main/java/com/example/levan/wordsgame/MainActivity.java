@@ -50,12 +50,13 @@ public class MainActivity extends AppCompatActivity {
                 l.InitializeLexicon(c);
             }
         });
-        l.InitializeLexicon(this);
-        System.out.print("done init");
+       // l.InitializeLexicon(this);
+       /* System.out.print("done init");
         System.out.println(l.isWord("Steri"));
         System.out.println(l.startsWith("cici"));
         System.out.println(l.startsWith("gadage"));
         System.out.println(l.startsWith("ck"));
+        */
      //   long st=new Date().getTime();
        // System.out.println("start "+ st);
         //permutate("","qwsdfrt");
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         //System.out.println("end "+(end-st));
 
         Intent in = new Intent(this,RoomActivity.class);
-        in.putExtra("lex",l);
+        //in.putExtra("lex",l);
         startActivity(in);
         this.finish();
 

@@ -21,6 +21,7 @@ public class GameController  extends Thread {
     private ArrayList<Player> players;
     private ArrayList<Card> cards;
     private ArrayList<Card> dealtCards;
+    private ArrayList<Card> cardsOriginal;
 
     private int nPlayer;
     private boolean[] responseGiven;
@@ -43,10 +44,7 @@ public class GameController  extends Thread {
 
 
 
-
-
-
-    public void GameController(int nPlayer, ArrayList<Player> players, Handler mainPlayerHandler){
+    public GameController(int nPlayer, ArrayList<Player> players, Handler mainPlayerHandler){
         this.players=players;
         this.nPlayer=nPlayer;
         responseGiven=new boolean[nPlayer+1];
@@ -62,11 +60,11 @@ public class GameController  extends Thread {
         alreadyRised=false;
         gameFinished=false;
         this.mainPlayerHandler=mainPlayerHandler;
+        cards=DataStore.getDasta();
         Collections.shuffle(cards);
         dealtCards=new ArrayList<>();
         playersOut=new HashSet<>();
         curHand=0;
-        cards=DataStore.getDasta();
         pot=0;
 
     }
@@ -78,11 +76,23 @@ public class GameController  extends Thread {
             money[i]=DataStore.startMoney;
         }
         while(true){
+            boolean cheker=true;
+            for(int i=0;i<players.size();i++){
+                cheker=cheker&&(players.get(i).getmHanlder()!=null);
+            }
+            if(cheker) break;
+        }
+
+        while(true){
             dealtCards.clear();
+            Collections.shuffle(cards);
             pot=DataStore.bidSequence[curHand]*(nPlayer+1-playersOut.size());
             dealCards();
+            System.out.println("darigda");
             suggestRise();
+            System.out.println("dareizda");
             askToAcceptRise();
+            System.out.println("gacalles");
             if(curHand<4) curHand+=1;
             evaluateResult();
             if(gameFinished){
@@ -125,14 +135,15 @@ public class GameController  extends Thread {
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.gameResult);
         mg.getData().putSerializable(DataStore.gameResult,gmr);
+        mainPlayerHandler.sendMessage(mg);
 
 
     }
 
     private ArrayList<Integer> checkIfanyOneOut() {
         ArrayList<Integer> playersNowOut=new ArrayList<>();
-        for(int i=0;i<money[i];i++){
-            if(!players.contains(i) && money[i]<DataStore.bidSequence[curHand] ){
+        for(int i=0;i<money.length;i++){
+            if(!players.contains(i) && money[i]<DataStore.bidSequence[curHand]+10 ){
                 playersOut.add(i);
                 playersNowOut.add(i);
             }
@@ -144,6 +155,7 @@ public class GameController  extends Thread {
     private ArrayList<Integer> getWinners(int maxScore, ArrayList<Integer> scores) {
         ArrayList<Integer> winners=new ArrayList<>();
         for(int i=0;i<scores.size()-1;i++){
+            if(scores.get(i)==null) continue;
             if(scores.get(i)==maxScore){
                 winners.add(i);
             }
@@ -159,7 +171,7 @@ public class GameController  extends Thread {
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askToAccetptRise);
             if(i==0){
                 mainPlayerHandler.sendMessage(ms);
-                lastSend=now.getTime();
+                lastSend=new Date().getTime();
             }else {
                 Message mg=new Message();
                 mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
@@ -167,10 +179,10 @@ public class GameController  extends Thread {
                 mg.getData().putInt(DataStore.messageToUIAksedToAcceptRise,i);
                 mainPlayerHandler.sendMessage(mg);
                 players.get(i-1).getmHanlder().sendMessage(ms);
-                lastSend=now.getTime();
+                lastSend=new Date().getTime();
             }
             acceptCall[i]=true;
-            while((now.getTime()-lastSend)<15000){
+            while((new Date().getTime()-lastSend)<15000){
                 if(riseAccepted[i]) break;
             }
             acceptCall[i]=false;
@@ -189,7 +201,7 @@ public class GameController  extends Thread {
             if(turnTorise==i){
                 if(i==0) {
                     mainPlayerHandler.sendMessage(ms);
-                    lastSend=now.getTime();
+                    lastSend=new Date().getTime();
                 }else{
                     Message mg=new Message();
                     mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
@@ -197,10 +209,10 @@ public class GameController  extends Thread {
                     mg.getData().putInt(DataStore.messageToUIAksedToRise,i);
                     mainPlayerHandler.sendMessage(mg);
                     players.get(i-1).getmHanlder().sendMessage(ms);
-                    lastSend=now.getTime();
+                    lastSend=new Date().getTime();
                 }
                 acceptRise[i]=true;
-                while((now.getTime()-lastSend)<15000){
+                while((new Date().getTime()-lastSend)<15000){
                     if(alreadyRised) return;
                 }
                 acceptRise[i]=false;
@@ -221,16 +233,22 @@ public class GameController  extends Thread {
             notifyNoMoreCards();
             interrupt();
         }
+        int darigebuli=0;
+
         for(int i=0;i<DataStore.Card_Number;i++){
-            dealtCards.add(cards.get(i));
-            curCards+=cards.get(i).getCharacter();
+            dealtCards.add(cards.get(darigebuli));
+            curCards+=cards.get(darigebuli).getCharacter();
+            darigebuli++;
         }
+
 
        //deal to person
         String mPlayerHand="";
+
         for(int j=0; j<2;j++){
-            dealtCards.add(cards.get(j));
-            mPlayerHand+=cards.get(j).getCharacter();
+            dealtCards.add(cards.get(darigebuli));
+            mPlayerHand+=cards.get(darigebuli).getCharacter();
+            darigebuli++;
         }
         Message msgTomainActivity= new Message();
         msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
@@ -243,9 +261,10 @@ public class GameController  extends Thread {
             String cardsTosend="";
             cardsTosend+=curCards;
             if(playersOut.contains(i+1)) continue;
-            for(int j=0; j<2;j++){
-                dealtCards.add(cards.get(j));
-                cardsTosend+=cards.get(j).getCharacter();
+            for(int j=darigebuli; j<2;j++){
+                dealtCards.add(cards.get(darigebuli));
+                cardsTosend+=cards.get(darigebuli).getCharacter();
+               darigebuli++;
             }
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
@@ -264,9 +283,10 @@ public class GameController  extends Thread {
     }
 
     private void waitForAnswers() {
-        staredWaiting=now.getTime();
+        staredWaiting=new Date().getTime();
+        System.out.println("dro danisna");
         //amomwebs dro xo ar gavida an yvelam xo ar gasca pasuxi da tu romelime shesrulda momdevno etapze gadadis
-        while((now.getTime()-staredWaiting)<=40000){
+        while((new Date().getTime()-staredWaiting)<=40000){
             boolean cheker=true;
             for(int i=0;i<responseGiven.length;i++){
                 cheker=(cheker&&responseGiven[i]);
@@ -274,6 +294,7 @@ public class GameController  extends Thread {
             }
             if(cheker) break;
         }
+        System.out.println("dro gavida");
     }
 
     //am metods izaxebs da tan romeli playeria eubneba da tan awyobil strings azlevs
@@ -298,7 +319,8 @@ public class GameController  extends Thread {
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
         mg.getData().putInt(DataStore.messageToUIRise,player);
-        pot+=10;
+        pot+=DataStore.bidSequence[curHand];
+        money[player]-=DataStore.bidSequence[curHand];
     }
 
 
@@ -313,6 +335,7 @@ public class GameController  extends Thread {
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);
         mg.getData().putInt(DataStore.messageToUIRiseCalled,player);
         pot+=10;
+        money[player]=money[player]-10;
 
     }
 
@@ -346,5 +369,9 @@ public class GameController  extends Thread {
         for(int i=0;i<winners.size();i++){
             money[i]+=pot/winners.size();
         }
+    }
+
+    public synchronized int getCurrentRound() {
+        return curHand;
     }
 }
