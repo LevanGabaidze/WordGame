@@ -1,6 +1,7 @@
 package com.example.levan.wordsgame;
 
 
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -41,6 +42,7 @@ public class RoomActivity extends AppCompatActivity {
     TextView composedWord;
     Typeface type;
     int numPlayers;
+    View playerBoard;
     int diff;
 
     MyLexicon lex;
@@ -76,6 +78,7 @@ public class RoomActivity extends AppCompatActivity {
     }
 
     private void initButtons() {
+        playerBoard = findViewById(R.id.player_board);
         ok = (Button) findViewById(R.id.btn_enter);
         yes = (Button) findViewById(R.id.btn_yes);
         no = (Button) findViewById(R.id.btn_no);
@@ -89,6 +92,7 @@ public class RoomActivity extends AppCompatActivity {
                 } else {
                     gm.riseBid(0);
                 }
+                playerBoard.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -102,6 +106,7 @@ public class RoomActivity extends AppCompatActivity {
                 } else {
                    // gm.riseBid(0);
                 }
+                playerBoard.setVisibility(View.INVISIBLE);
             }
         });
 
@@ -119,10 +124,12 @@ public class RoomActivity extends AppCompatActivity {
                 composedWord.setText("");
                 chosenCards.clear();
                 for (int i=0; i<cards.size(); i++) {
-                    cards.get(i).setEnabled(true);
+                    //cards.get(i).setEnabled(true);
+                    enable(cards.get(i),true);
                 }
                 for (int i=0; i<myCards.size(); i++) {
-                    myCards.get(i).setEnabled(true);
+                    //myCards.get(i).setEnabled(true);
+                    enable(myCards.get(i),true);
                 }
             }
         });
@@ -130,7 +137,10 @@ public class RoomActivity extends AppCompatActivity {
         delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                chosenCards.get(chosenCards.size()-1).setEnabled(true);
+                //chosenCards.get(chosenCards.size()-1).setEnabled(true);
+                if (chosenCards.size()<1) return;
+                enable(chosenCards.get(chosenCards.size()-1),true);
+                chosenCards.remove(chosenCards.size()-1);
                 if (myWord.length()<2) myWord = ""; else myWord = myWord.substring(0,myWord.length()-1);
                 composedWord.setText(myWord);
             }
@@ -147,6 +157,13 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void enable(View v, boolean b) {
+
+        if (b) v.setVisibility(View.VISIBLE);
+            else v.setVisibility(View.INVISIBLE);
+        v.setEnabled(b);
     }
 
     private void initPlayers() {
@@ -179,19 +196,27 @@ public class RoomActivity extends AppCompatActivity {
                // am dros karti pirvelad darigda xeli
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);
+               composedWord.setText("dro CarTulia");
                for (int i=0; i<commonCard.length(); i++) {
                    ((TextView)cards.get(i).findViewById(R.id.card_letter)).setText(commonCard.charAt(i)+"");
+                    cards.get(i).setVisibility(View.VISIBLE);
                }
                for (int i=0; i<playerCards.length(); i++) {
                    ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setText(playerCards.charAt(i)+"");
+                   myCards.get(i).setVisibility(View.VISIBLE);
                }
                System.out.println(commonCard+" chemi: "+playerCards);
                break;
            case DataStore.askRise:
-               // aq nisHnavs ro mekitxeba vareizeb tu ara
+               composedWord.setText("gsurT gazardoT fsoni?");
+               playerBoard.setVisibility(View.VISIBLE);
+               callType = false;
                break;
            case DataStore.askToAccetptRise:
                //aq gekitxeba miyvebi tu ara.
+               callType = true;
+               playerBoard.setVisibility(View.VISIBLE);
+               composedWord.setText("asworebT Tu ara fsons?");
                break;
            case DataStore.graphicRequest:
                changeGameGraphics(msg);
@@ -260,7 +285,8 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 String let =(String)((TextView) view.findViewById(R.id.card_letter)).getText();
                 myWord = myWord+let;
-                view.setEnabled(false);
+                //view.setEnabled(false);
+                enable(view,false);
                 composedWord.setText(myWord);
                 chosenCards.add(view);
             }
