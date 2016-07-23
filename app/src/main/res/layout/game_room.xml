@@ -92,91 +92,60 @@
         android:paddingTop="70dp"
         android:orientation="horizontal"
         android:gravity="center"
-
         android:layout_weight="1"
         >
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card1"
+
+
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd1"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@drawable/card_back"
-            android:textAlignment="center"
-            android:text="s"
-            />
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card2"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:layout_margin="@dimen/medium_margin"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
 
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card3"
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd2"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
 
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card4"
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd3"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
 
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card5"
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd4"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
 
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card6"
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd5"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
 
-        <TextView
-            android:layout_width="@dimen/card_w"
-            android:layout_height="@dimen/card_l"
-            android:id="@+id/card7"
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd6"
             android:layout_margin="@dimen/medium_margin"
-            android:layout_gravity="center"
-            android:textSize="@dimen/cardfontsize"
-            android:background="@android:color/white"
-            android:textAlignment="center"
-            android:text="s"
             />
+
+        <include layout="@layout/card"
+            android:layout_width="20dp"
+            android:layout_height="40dp"
+            android:id="@+id/crd7"
+            android:layout_margin="@dimen/medium_margin"
+            />
+
+
     </LinearLayout>
 
         <LinearLayout
@@ -186,28 +155,18 @@
             android:paddingBottom="@dimen/medium_margin"
             android:layout_weight="1">
 
-            <TextView
-                android:layout_width="@dimen/card_w"
-                android:layout_height="@dimen/card_l"
-                android:id="@+id/card8"
-                android:layout_margin="@dimen/small_margin"
-                android:layout_gravity="center"
-                android:textSize="@dimen/cardfontsize"
-                android:background="@android:color/white"
-                android:textAlignment="center"
-                android:text="s"
+            <include layout="@layout/card"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:id="@+id/crd8"
+                android:layout_margin="@dimen/medium_margin"
                 />
 
-            <TextView
-                android:layout_width="@dimen/card_w"
-                android:layout_height="@dimen/card_l"
-                android:id="@+id/card9"
-                android:layout_margin="@dimen/small_margin"
-                android:layout_gravity="center"
-                android:textSize="@dimen/cardfontsize"
-                android:background="@android:color/white"
-                android:textAlignment="center"
-                android:text="s"
+            <include layout="@layout/card"
+                android:layout_width="20dp"
+                android:layout_height="40dp"
+                android:id="@+id/crd9"
+                android:layout_margin="@dimen/medium_margin"
                 />
 
 
@@ -221,16 +180,55 @@
         android:orientation="horizontal"
         android:layout_weight="0.7">
 
-    <TextView
+
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/medium_margin"
-        android:layout_weight="2"
-        android:layout_gravity="center"
-        android:textSize="40dp"
-        android:textAlignment="center"
-        android:text="abcdef"
-        />
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_weight="2">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:id="@+id/composed_text"
+            android:layout_marginTop="@dimen/medium_margin"
+            android:layout_weight="3"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="40dp"
+            android:textAlignment="center"
+            android:text="abcdef"
+            />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:gravity="center"
+            android:visibility="invisible"
+            android:layout_weight="2">
+
+            <Button
+                android:layout_width="70dp"
+                android:layout_height="@dimen/button_h"
+                android:id="@+id/btn_yes"
+                android:layout_margin="@dimen/medium_margin"
+                android:text="YES"/>
+
+            <Button
+                android:layout_width="70dp"
+                android:layout_height="@dimen/button_h"
+                android:id="@+id/btn_no"
+                android:layout_margin="@dimen/medium_margin"
+                android:text="NO"/>
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -259,7 +257,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="@dimen/small_margin"
                 android:id="@+id/btn_enter"
-                android:text="OK"
+                android:text="გაგზავნა"
                 />
 
 

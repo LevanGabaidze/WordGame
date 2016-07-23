@@ -73,6 +73,113 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Plese choose number of oponents:"
+                android:layout_margin="@dimen/medium_margin"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:orientation="horizontal"
+
+                android:layout_height="50dp">
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:text="1"
+                    android:checked="true"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/oponent_q1"/>
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2"
+                    android:id="@+id/oponent_q2"/>
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="3"
+                    android:id="@+id/oponent_q3"/>
+
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="please choose difficulty: "
+                android:layout_margin="@dimen/medium_margin"/>
+
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="easy"
+                    android:checked="true"
+                    android:id="@+id/diff_lvl1"/>
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="medium"
+                    android:id="@+id/diff_lvl2"/>
+
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="hard"
+                    android:id="@+id/diff_lvl3"/>
+
+            </RadioGroup>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:layout_width="@dimen/button_w"
+                    android:layout_height="@dimen/button_h"
+                    android:layout_margin="@dimen/medium_margin"
+                    android:id="@+id/back_btn"
+                    android:text="@string/back"
+                    />
+
+
+                <Button
+                    android:layout_width="@dimen/button_w"
+                    android:layout_height="@dimen/button_h"
+                    android:text="Start"
+                    android:id="@+id/begin_game"
+                    android:layout_margin="@dimen/medium_margin"
+                    />
+
+
+
+            </LinearLayout>
+
+
+
+
+            
+
+
+        </LinearLayout>
+
 
     </ViewAnimator>
 

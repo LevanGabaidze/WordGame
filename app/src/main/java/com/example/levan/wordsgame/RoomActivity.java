@@ -1,6 +1,7 @@
 package com.example.levan.wordsgame;
 
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -29,6 +30,10 @@ public class RoomActivity extends AppCompatActivity {
 
     ArrayList<TextView> cards;
     ArrayList<TextView> myCards;
+    TextView composedWord;
+    Typeface type;
+    int numPlayers;
+    int diff;
 
     MyLexicon lex;
     GameController gm;
@@ -37,6 +42,8 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_room);
+        numPlayers = getIntent().getIntExtra("np",1);
+        diff = getIntent().getIntExtra("diff",0);
         lex = new MyLexicon();
         lex.InitializeLexicon(this);
         DataStore.createMap(this);
@@ -47,8 +54,18 @@ public class RoomActivity extends AppCompatActivity {
             }
         };
         InitialazieGame(2,1);
+        composedWord = (TextView) findViewById(R.id.composed_text);
+        type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
+        composedWord.setTypeface(type);
+        initCards();
+        //initPlayers();
 
 
+
+
+    }
+
+    private void initCards() {
 
 
     }

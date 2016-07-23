@@ -3,6 +3,8 @@ package com.example.levan.wordsgame;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.view.View;
@@ -14,6 +16,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.ViewAnimator;
 
 import com.example.levan.wordsgame.backClasses.MyLexicon;
@@ -30,46 +35,89 @@ public class MainActivity extends AppCompatActivity {
 
     public int k=0;
     ArrayList<String> arr;
+    Button play, multy, exit, begin, back;
+    RadioButton easyDif, np1, np2, np3;
+    AppCompatActivity c;
+
+
+    private void initButtons() {
+        back = (Button) findViewById(R.id.back_btn);
+        play = (Button) findViewById(R.id.start_play);
+        exit = (Button) findViewById(R.id.btn_exit);
+        multy = (Button) findViewById(R.id.multiPlayer);
+        begin = (Button) findViewById(R.id.begin_game);
+        easyDif = (RadioButton) findViewById(R.id.diff_lvl1);
+        np1 = (RadioButton) findViewById(R.id.oponent_q1);
+        np2 = (RadioButton) findViewById(R.id.oponent_q2);
+        np3 = (RadioButton) findViewById(R.id.oponent_q3);
+
+        begin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int np = getNp();
+                int diff;
+                if (easyDif.isChecked()) diff = 0; else diff = 1;
+                Intent in = new Intent(c,RoomActivity.class);
+                in.putExtra("diff",diff);
+                in.putExtra("np",np);
+                startActivity(in);
+                c.finish();
+            }
+        });
+
+
+    }
+
+    Handler h;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_activity);
-        ViewAnimator an = (ViewAnimator) findViewById(R.id.animator);
-        CircularProgressView load = (CircularProgressView) findViewById(R.id.progress_view);
-        load.startAnimation();
-
-        load.startAnimation();
-        an.showNext();
-
-        final MyLexicon  l = new MyLexicon();
-        final Context c=this;
-        Thread wokr=new Thread(new Runnable() {
+        h = new Handler();
+        c=this;
+        initButtons();
+        final ViewAnimator an = (ViewAnimator) findViewById(R.id.animator);
+        final CircularProgressView load = (CircularProgressView) findViewById(R.id.progress_view);
+        play =(Button) findViewById(R.id.start_play);
+        play.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void run() {
-                l.InitializeLexicon(c);
+            public void onClick(View view) {
+                an.showNext();
+               // Intent in = new Intent(c,RoomActivity.class);
+                //startActivity(in);
+                //c.finish();
+
             }
         });
-       // l.InitializeLexicon(this);
-       /* System.out.print("done init");
-        System.out.println(l.isWord("Steri"));
-        System.out.println(l.startsWith("cici"));
-        System.out.println(l.startsWith("gadage"));
-        System.out.println(l.startsWith("ck"));
-        */
-     //   long st=new Date().getTime();
-       // System.out.println("start "+ st);
-        //permutate("","qwsdfrt");
-        //long end=new Date().getTime();
-        //System.out.println("end "+(end-st));
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                h.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        load.stopAnimation();
+                        an.showNext();
+                    }
+                });
 
-        Intent in = new Intent(this,RoomActivity.class);
-        //in.putExtra("lex",l);
-        startActivity(in);
-        this.finish();
+            }
+        });
+        th.start();
+        load.startAnimation();
+
+        //an.showNext();
+
+       // Intent in = new Intent(this,RoomActivity.class);
+       // startActivity(in);
+        //this.finish();
 
     }
-
 
 
     private void permutate(String prefix,String str) {
@@ -85,4 +133,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    public int getNp() {
+        if(np3.isChecked()) return 3;
+        if (np2.isChecked()) return 2;
+        return 1;
+    }
 }
