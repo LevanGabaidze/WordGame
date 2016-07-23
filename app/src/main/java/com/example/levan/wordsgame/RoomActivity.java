@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import com.example.levan.wordsgame.backClasses.MyLexicon;
 import com.example.levan.wordsgame.backClasses.OriginalAI;
 import com.example.levan.wordsgame.backClasses.Player;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 /**
@@ -28,8 +31,13 @@ import java.util.ArrayList;
 public class RoomActivity extends AppCompatActivity {
 
 
-    ArrayList<TextView> cards;
-    ArrayList<TextView> myCards;
+    ArrayList<View> cards;
+    ArrayList<View> myCards;
+    ArrayList<View> players;
+    ArrayList<View> chosenCards = new ArrayList<>();
+    String myWord ="";
+    boolean callType = false;
+    Button clear, delete, ok, yes, no;
     TextView composedWord;
     Typeface type;
     int numPlayers;
@@ -45,6 +53,9 @@ public class RoomActivity extends AppCompatActivity {
         numPlayers = getIntent().getIntExtra("np",1);
         diff = getIntent().getIntExtra("diff",0);
         lex = new MyLexicon();
+        initCards();
+        initPlayers();
+        initButtons();
         lex.InitializeLexicon(this);
         DataStore.createMap(this);
         myHandler=new Handler(){
@@ -57,18 +68,109 @@ public class RoomActivity extends AppCompatActivity {
         composedWord = (TextView) findViewById(R.id.composed_text);
         type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
         composedWord.setTypeface(type);
-        initCards();
-        //initPlayers();
 
 
 
 
+
+    }
+
+    private void initButtons() {
+        ok = (Button) findViewById(R.id.btn_enter);
+        yes = (Button) findViewById(R.id.btn_yes);
+        no = (Button) findViewById(R.id.btn_no);
+        clear = (Button) findViewById(R.id.btn_clear);
+        delete = (Button) findViewById(R.id.btn_backspace);
+        yes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (callType) {
+                    gm.acceptBid(0);
+                } else {
+                    gm.riseBid(0);
+                }
+            }
+        });
+
+        no.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // aq metodia gmshi shesacvleli bool ro gadaeces
+                if (callType) {
+                    //
+                   // gm.acceptBid(0);
+                } else {
+                   // gm.riseBid(0);
+                }
+            }
+        });
+
+        ok.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                gm.setAnswer(0,myWord);
+            }
+        });
+
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                myWord = "";
+                composedWord.setText("");
+                chosenCards.clear();
+                for (int i=0; i<cards.size(); i++) {
+                    cards.get(i).setEnabled(true);
+                }
+                for (int i=0; i<myCards.size(); i++) {
+                    myCards.get(i).setEnabled(true);
+                }
+            }
+        });
+
+        delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chosenCards.get(chosenCards.size()-1).setEnabled(true);
+                if (myWord.length()<2) myWord = ""; else myWord = myWord.substring(0,myWord.length()-1);
+                composedWord.setText(myWord);
+            }
+        });
+
+        for (int i=0; i<cards.size(); i++) {
+            //final int ii = i;
+            setListener(cards.get(i));
+        }
+
+        for (int i=0; i<myCards.size(); i++) {
+            setListener(myCards.get(i));
+        }
+
+
+
+    }
+
+    private void initPlayers() {
+        players = new ArrayList<>();
+        players.add(findViewById(R.id.op1));
+        players.add(findViewById(R.id.op2));
+        players.add(findViewById(R.id.op3));
     }
 
     private void initCards() {
-
-
+        cards = new ArrayList<>();
+        myCards = new ArrayList<>();
+        cards.add(findViewById(R.id.crd1));
+        cards.add(findViewById(R.id.crd2));
+        cards.add(findViewById(R.id.crd3));
+        cards.add(findViewById(R.id.crd4));
+        cards.add(findViewById(R.id.crd5));
+        cards.add(findViewById(R.id.crd6));
+        cards.add(findViewById(R.id.crd7));
+        myCards.add(findViewById(R.id.crd8));
+        myCards.add(findViewById(R.id.crd9));
     }
+
+
 
     private void ReactOnMessage(Message msg) {
        String flag= msg.getData().getString(DataStore.requestTypeFlag);
@@ -77,6 +179,12 @@ public class RoomActivity extends AppCompatActivity {
                // am dros karti pirvelad darigda xeli
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);
+               for (int i=0; i<commonCard.length(); i++) {
+                   ((TextView)cards.get(i).findViewById(R.id.card_letter)).setText(commonCard.charAt(i)+"");
+               }
+               for (int i=0; i<playerCards.length(); i++) {
+                   ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setText(playerCards.charAt(i)+"");
+               }
                System.out.println(commonCard+" chemi: "+playerCards);
                break;
            case DataStore.askRise:
@@ -146,4 +254,16 @@ public class RoomActivity extends AppCompatActivity {
     }
 
 
+    public void setListener(View listener) {
+        listener.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String let =(String)((TextView) view.findViewById(R.id.card_letter)).getText();
+                myWord = myWord+let;
+                view.setEnabled(false);
+                composedWord.setText(myWord);
+                chosenCards.add(view);
+            }
+        });
+    }
 }

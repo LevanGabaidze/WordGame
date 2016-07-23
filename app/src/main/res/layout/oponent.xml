@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/op_image"
+        android:layout_margin="5dp"
+        android:src="@drawable/default_profile"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/op_text"
+        android:textAlignment="center"
+        android:text="black"/>
+
+</LinearLayout>
