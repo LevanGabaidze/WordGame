@@ -184,6 +184,7 @@ public class GameController  extends Thread {
                 mg.getData().putInt(DataStore.messageToUIAksedToAcceptRise,i);
                 mainPlayerHandler.sendMessage(mg);
                 players.get(i-1).getmHanlder().sendMessage(ms);
+
                 // es me davamate (tu auria )))
               //  mainPlayerHandler.sendMessage(ms);
                 lastSend=new Date().getTime();
