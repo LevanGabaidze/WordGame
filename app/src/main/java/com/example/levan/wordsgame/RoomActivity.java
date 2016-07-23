@@ -1,6 +1,7 @@
 package com.example.levan.wordsgame;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class RoomActivity extends AppCompatActivity {
     Typeface type;
     int numPlayers;
     View playerBoard;
+    ArrayList<Integer> moneys =  new ArrayList<>();
     int diff;
 
     MyLexicon lex;
@@ -52,6 +54,7 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_room);
+        type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
         numPlayers = getIntent().getIntExtra("np",1);
         diff = getIntent().getIntExtra("diff",0);
         lex = new MyLexicon();
@@ -68,7 +71,7 @@ public class RoomActivity extends AppCompatActivity {
         };
         InitialazieGame(2,1);
         composedWord = (TextView) findViewById(R.id.composed_text);
-        type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
+
         composedWord.setTypeface(type);
 
 
@@ -171,6 +174,15 @@ public class RoomActivity extends AppCompatActivity {
         players.add(findViewById(R.id.op1));
         players.add(findViewById(R.id.op2));
         players.add(findViewById(R.id.op3));
+        for (int i=0; i<numPlayers; i++) {
+            moneys.add(100);
+        }
+        for(int i=0; i<players.size(); i++) {
+            if (i>=numPlayers) {
+                players.get(i).setEnabled(false);
+                players.get(i).setVisibility(View.GONE);
+            }
+        }
     }
 
     private void initCards() {
@@ -185,6 +197,12 @@ public class RoomActivity extends AppCompatActivity {
         cards.add(findViewById(R.id.crd7));
         myCards.add(findViewById(R.id.crd8));
         myCards.add(findViewById(R.id.crd9));
+        for (int i=0; i<cards.size(); i++) {
+            ((TextView)cards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
+        }
+        for (int i=0; i<myCards.size(); i++) {
+            ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
+        }
     }
 
 
@@ -196,12 +214,18 @@ public class RoomActivity extends AppCompatActivity {
                // am dros karti pirvelad darigda xeli
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);
+               // aq chemi fulic unda vakotrolo
+               for (int i=1; i<moneys.size(); i++) {
+                   ((TextView) players.get(i).findViewById(R.id.money)).setText(moneys.get(i)+"$");
+               }
                composedWord.setText("dro CarTulia");
                for (int i=0; i<commonCard.length(); i++) {
+                   cards.get(i).setEnabled(true);
                    ((TextView)cards.get(i).findViewById(R.id.card_letter)).setText(commonCard.charAt(i)+"");
                     cards.get(i).setVisibility(View.VISIBLE);
                }
                for (int i=0; i<playerCards.length(); i++) {
+                   myCards.get(i).setEnabled(true);
                    ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setText(playerCards.charAt(i)+"");
                    myCards.get(i).setVisibility(View.VISIBLE);
                }
@@ -223,6 +247,7 @@ public class RoomActivity extends AppCompatActivity {
                break;
            case DataStore.gameResult:
                GameResult result =(GameResult) msg.getData().getSerializable(DataStore.gameResult);
+               finishHand(result);
                System.out.println("gameResult"+result.getWinners());
                System.out.println("es sityvebia: "+result.getWords());
 
@@ -231,6 +256,29 @@ public class RoomActivity extends AppCompatActivity {
        }
     }
 
+    private void finishHand(GameResult result) {
+        int winner = result.getWinners().get(0);
+        myWord = "";
+        if (winner == 0) composedWord.setText("You win!"); else {
+            ((TextView)(players.get(winner-1).findViewById(R.id.oponent_message))).setText("Winner");
+            // aq Cemi fuli unda Sevcvalo
+            for (int i=0; i<result.getScores().size(); i++) {
+                if (i==0) continue;
+                ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
+            }
+            for (int i=0; i<result.getWords().size(); i++) {
+                if (i==0) continue;
+                ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(result.getWords().get(i)+"");
+            }
+            moneys = result.getMoney();
+            clear.callOnClick();
+
+        }
+
+
+    }
+
+
     private void changeGameGraphics(Message msg) {
         String flag = msg.getData().getString(DataStore.graphicRequest);
         int player;
@@ -238,18 +286,26 @@ public class RoomActivity extends AppCompatActivity {
             case DataStore.messageToUIAksedToRise:
                 player = msg.getData().getInt(DataStore.messageToUIAksedToRise);
                 System.out.println(player+" vkitxe raisi");
+                if (player == 0) return;
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
                 break;
             case DataStore.messageToUIAksedToAcceptRise:
                 player = msg.getData().getInt(DataStore.messageToUIAksedToRise);
                 System.out.println("kitxa" + player+" call tu ara");
+                if (player == 0) return;
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
                 break;
             case DataStore.messageToUIRiseCalled:
                 player = msg.getData().getInt(DataStore.messageToUIRiseCalled);
                 System.out.println(player+ " aman dacalla ");
+                if (player ==0) return;
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("called");
                 break;
             case DataStore.messageToUIRise:
                 player = msg.getData().getInt(DataStore.messageToUIRise);
                 System.out.println(player+ " aman daaraisa pirvelma");
+                if (player == 0) return;
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("raised");
                 break;
         }
 

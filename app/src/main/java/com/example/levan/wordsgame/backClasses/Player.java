@@ -54,6 +54,11 @@ public class Player extends Thread {
 
     private void acceptRise() {
         if(ai.acceptRise()){
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             gm.acceptBid(myNumber);
             setMoney( money-10);
 
@@ -62,6 +67,11 @@ public class Player extends Thread {
 
     private void rise() {
         if(ai.riseOrNot()){
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             gm.riseBid(myNumber);
             setMoney(money-DataStore.bidSequence[gm.getCurrentRound()]);
         }
@@ -69,6 +79,11 @@ public class Player extends Thread {
 
     private void giveAnswer(String str) {
         String answer=ai.getWord(str);
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         gm.setAnswer(myNumber,answer);
     }
 

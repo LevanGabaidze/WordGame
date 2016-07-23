@@ -136,6 +136,11 @@ public class GameController  extends Thread {
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.gameResult);
         mg.getData().putSerializable(DataStore.gameResult,gmr);
         mainPlayerHandler.sendMessage(mg);
+        try {
+            sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
 
     }
@@ -179,6 +184,8 @@ public class GameController  extends Thread {
                 mg.getData().putInt(DataStore.messageToUIAksedToAcceptRise,i);
                 mainPlayerHandler.sendMessage(mg);
                 players.get(i-1).getmHanlder().sendMessage(ms);
+                // es me davamate (tu auria )))
+              //  mainPlayerHandler.sendMessage(ms);
                 lastSend=new Date().getTime();
             }
             acceptCall[i]=true;
@@ -255,6 +262,7 @@ public class GameController  extends Thread {
         msgTomainActivity.getData().putString(DataStore.commonCards,curCards);
         msgTomainActivity.getData().putString(DataStore.playerCards,mPlayerHand);
         mainPlayerHandler.sendMessage(msgTomainActivity);
+
 
         //deal to computer
         for(int i=0;i<nPlayer;i++){
