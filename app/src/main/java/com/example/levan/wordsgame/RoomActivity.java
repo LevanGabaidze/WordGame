@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.ViewAnimator;
 
 import com.example.levan.wordsgame.backClasses.DataStore;
 import com.example.levan.wordsgame.backClasses.GameController;
@@ -23,6 +24,7 @@ import com.example.levan.wordsgame.backClasses.MediumAI;
 import com.example.levan.wordsgame.backClasses.MyLexicon;
 import com.example.levan.wordsgame.backClasses.OriginalAI;
 import com.example.levan.wordsgame.backClasses.Player;
+import com.github.rahatarmanahmed.cpv.CircularProgressView;
 
 import org.w3c.dom.Text;
 
@@ -45,8 +47,9 @@ public class RoomActivity extends AppCompatActivity {
     TimerThread timer;
     Button clear, delete, ok, yes, no;
     int countOut = 0;
-    //int money;
+    CircularProgressView progress;
     TextView composedWord;
+    ViewAnimator anim;
     Typeface type;
     int numPlayers;
     TextView myCurMoney, myCurScore, curTime;
@@ -54,6 +57,7 @@ public class RoomActivity extends AppCompatActivity {
     TextView pot_value;
     ArrayList<Integer> moneys =  new ArrayList<>();
     int diff;
+    AppCompatActivity c = this;
 
     MyLexicon lex;
     GameController gm;
@@ -62,6 +66,9 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_room);
+        anim =(ViewAnimator) findViewById(R.id.animator_room);
+        progress = (CircularProgressView)findViewById(R.id.progress_view_room);
+        progress.startAnimation();
         //timer = new TimerThread(curTime,40);
         type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
         numPlayers = getIntent().getIntExtra("np",1);
@@ -75,15 +82,30 @@ public class RoomActivity extends AppCompatActivity {
         initButtons();
         pot = findViewById(R.id.pot_overall);
         pot_value =(TextView) pot.findViewById(R.id.pot_amount);
-        lex.InitializeLexicon(this);
-        DataStore.createMap(this);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                lex.InitializeLexicon(c);
+                DataStore.createMap(c);
+                InitialazieGame(numPlayers,diff);
+                anim.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        progress.stopAnimation();
+                        anim.showNext();
+                    }
+                });
+            }
+        }).start();
+       // lex.InitializeLexicon(this);
+
         myHandler=new Handler(){
             @Override
             public void handleMessage(Message msg) {
                 ReactOnMessage(msg);
             }
         };
-        InitialazieGame(numPlayers,diff);
+
         composedWord = (TextView) findViewById(R.id.composed_text);
 
         composedWord.setTypeface(type);
