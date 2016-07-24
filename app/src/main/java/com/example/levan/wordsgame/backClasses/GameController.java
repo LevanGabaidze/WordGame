@@ -41,6 +41,7 @@ public class GameController  extends Thread {
     private int curHand;
     private int pot;
     private int[] money;
+    boolean [] called;
 
 
 
@@ -65,6 +66,7 @@ public class GameController  extends Thread {
         dealtCards=new ArrayList<>();
         playersOut=new HashSet<>();
         curHand=0;
+        called = new boolean[nPlayer+1];
         pot=0;
 
     }
@@ -122,6 +124,7 @@ public class GameController  extends Thread {
             responseGiven[i]=false;
             riseAccepted[i]=false;
             bidRisen[i]=false;
+            called[i] = false;
         }
         ArrayList<Integer> moneys=new ArrayList<>();
 
@@ -213,7 +216,7 @@ public class GameController  extends Thread {
             }
             acceptCall[i]=true;
             while((new Date().getTime()-lastSend)<15000){
-                if(riseAccepted[i]) break;
+                if(called[i]) break;
             }
             acceptCall[i]=false;
 
@@ -377,6 +380,7 @@ public class GameController  extends Thread {
 
 
         riseAccepted[player]=answer;
+        called[player] = true;
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);

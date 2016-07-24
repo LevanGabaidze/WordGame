@@ -215,8 +215,8 @@ public class RoomActivity extends AppCompatActivity {
         cards.add(findViewById(R.id.crd3));
         cards.add(findViewById(R.id.crd4));
         cards.add(findViewById(R.id.crd5));
-       //// cards.add(findViewById(R.id.crd6));
-       // cards.add(findViewById(R.id.crd7));
+        cards.add(findViewById(R.id.crd6));
+        cards.add(findViewById(R.id.crd7));
         myCards.add(findViewById(R.id.crd8));
         myCards.add(findViewById(R.id.crd9));
         for (int i=0; i<cards.size(); i++) {
@@ -346,6 +346,8 @@ public class RoomActivity extends AppCompatActivity {
                 break;
             case DataStore.messageToUIRise:
                 player = msg.getData().getInt(DataStore.messageToUIRise);
+                //
+                boolean b = msg.getData().getBoolean(DataStore.answerIs);
                 System.out.println(player+ " aman daaraisa pirvelma");
                 if (player == 0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("raised");
