@@ -327,43 +327,55 @@ public class GameController  extends Thread {
     }
 
    //es metodi unda gamoizaxos playerma an tvinma roca kitxavs gamecontrolleri xo ar ginda awioo,rigirigobit ekitxeba ra tipebs
-    public synchronized void   riseBid(int player){
+    public synchronized void   riseBid(int player,boolean answer){
         if(!acceptRise[player])
             return;
-        bidRisen[player]=true;
-        riseAccepted[player]=true;
+
+
+        bidRisen[player]=answer;
+        riseAccepted[player]=answer;
         alreadyRised=true;
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
         mg.getData().putInt(DataStore.messageToUIRise,player);
-        pot+=10;
-        money[player]-=10;
+        mg.getData().putBoolean(DataStore.answerIs,answer);
         mainPlayerHandler.sendMessage(mg);
-        Message ms=new Message();
-        ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
-        ms.getData().putInt(DataStore.potUpdate,pot);
-        mainPlayerHandler.sendMessage(ms);
+        if(answer){
+            pot+=10;
+            money[player]-=10;
+            Message ms=new Message();
+            ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
+            ms.getData().putInt(DataStore.potUpdate,pot);
+            mainPlayerHandler.sendMessage(ms);
+        }
+
     }
 
 
 
     //es metodi unda gamoizaxos playerma an tvinma roca mesigs daichers rom vigacam awia da shen ra shvrebio
-    public synchronized void   acceptBid(int player){
+    public synchronized void   acceptBid(int player,boolean answer){
         if(!acceptCall[player])
             return;
-        riseAccepted[player]=true;
+
+
+        riseAccepted[player]=answer;
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);
         mg.getData().putInt(DataStore.messageToUIRiseCalled,player);
-        pot+=10;
+        mg.getData().putBoolean(DataStore.answerIs,answer);
         mainPlayerHandler.sendMessage(mg);
-        money[player]=money[player]-10;
-        Message ms=new Message();
-        ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
-        ms.getData().putInt(DataStore.potUpdate,pot);
-        mainPlayerHandler.sendMessage(ms);
+        if(answer){
+            pot+=10;
+            money[player]=money[player]-10;
+            Message ms=new Message();
+            ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
+            ms.getData().putInt(DataStore.potUpdate,pot);
+            mainPlayerHandler.sendMessage(ms);
+        }
+
     }
 
 

@@ -59,8 +59,16 @@ public class Player extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            gm.acceptBid(myNumber);
+            gm.acceptBid(myNumber,true);
             setMoney( money-10);
+
+        }else{
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            gm.acceptBid(myNumber,false);
 
         }
     }
@@ -72,8 +80,16 @@ public class Player extends Thread {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            gm.riseBid(myNumber);
+            gm.riseBid(myNumber,true);
             setMoney(money-DataStore.bidSequence[gm.getCurrentRound()]);
+        }else{
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            gm.riseBid(myNumber,false);
+
         }
     }
 

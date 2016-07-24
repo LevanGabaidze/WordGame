@@ -26,6 +26,7 @@ public  class  DataStore {
     public final static String graphicRequest="graphicRequest";
     public final static String gameResult="gameResult";
     public final static String potUpdate="sendingPotValue";
+    public final static String answerIs="risedOrNotCalledOrNot";
 
 
     public final static  String noMoreCards="noMoreCards";
