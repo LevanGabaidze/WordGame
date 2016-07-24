@@ -216,6 +216,7 @@ public class RoomActivity extends AppCompatActivity {
         myCards.add(findViewById(R.id.crd9));
         for (int i=0; i<cards.size(); i++) {
             ((TextView)cards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
+            if (i>4) cards.get(i).setVisibility(View.GONE);
         }
         for (int i=0; i<myCards.size(); i++) {
             ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
@@ -289,6 +290,7 @@ public class RoomActivity extends AppCompatActivity {
                 ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(result.getWords().get(i)+"");
             }
             moneys = result.getMoney();
+            updateMoneys();
             System.out.println("monnnneuiuyyyyyyyyy: "+moneys);
             clear.callOnClick();
 
