@@ -311,7 +311,7 @@ public class RoomActivity extends AppCompatActivity {
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
                 break;
             case DataStore.messageToUIAksedToAcceptRise:
-                player = msg.getData().getInt(DataStore.messageToUIAksedToRise);
+                player = msg.getData().getInt(DataStore.messageToUIAksedToAcceptRise);
                 System.out.println("kitxa" + player+" call tu ara");
                 if (player == 0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
