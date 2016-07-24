@@ -86,10 +86,7 @@ public class GameController  extends Thread {
         while(true){
             dealtCards.clear();
             Collections.shuffle(cards);
-            pot=DataStore.bidSequence[curHand]*(nPlayer+1-playersOut.size());
-            for (int i=0; i<money.length; i++) {
-                money[i]-=DataStore.bidSequence[curHand];
-            }
+            pot=0;
             dealCards();
             suggestRise();
             askToAcceptRise();
