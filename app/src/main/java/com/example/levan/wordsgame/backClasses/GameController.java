@@ -406,7 +406,7 @@ public class GameController  extends Thread {
 
     public void setMoney(ArrayList<Integer> winners) {
         for(int i=0;i<winners.size();i++){
-            money[i]+=pot/winners.size();
+            money[winners.get(i)]+=pot/winners.size();
         }
     }
 

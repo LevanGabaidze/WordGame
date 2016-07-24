@@ -136,6 +136,7 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 myWord = "";
+                myCurScore.setText("0 pnt");
                 composedWord.setText("");
                 chosenCards.clear();
                 for (int i=0; i<cards.size(); i++) {
@@ -158,6 +159,7 @@ public class RoomActivity extends AppCompatActivity {
                 chosenCards.remove(chosenCards.size()-1);
                 if (myWord.length()<2) myWord = ""; else myWord = myWord.substring(0,myWord.length()-1);
                 composedWord.setText(myWord);
+                myCurScore.setText(getScore(myWord)+"pnt");
             }
         });
 
@@ -384,6 +386,7 @@ public class RoomActivity extends AppCompatActivity {
                 //view.setEnabled(false);
                 enable(view,false);
                 composedWord.setText(myWord);
+                myCurScore.setText(getScore(myWord)+" pnt");
                 chosenCards.add(view);
             }
         });
@@ -397,11 +400,12 @@ public class RoomActivity extends AppCompatActivity {
         public TimerThread(TextView v, int sec) {
             timer = v;
             secs = sec;
+            count = sec;
         }
         @Override
         public void run() {
             super.run();
-            while (count<secs) {
+            while (count>0) {
                 if(isInterrupted()) return;
                 try {
                     sleep(1000);
@@ -409,7 +413,7 @@ public class RoomActivity extends AppCompatActivity {
                     return;
                     //e.printStackTrace();
                 }
-                count++;
+                count--;
                 timer.post(new Runnable() {
                         @Override
                         public void run() {
@@ -425,5 +429,14 @@ public class RoomActivity extends AppCompatActivity {
 
             });
         }
+    }
+
+    private int getScore(String st) {
+        if (st == null) return 0;
+        int res= 0;
+        for (int i=0; i<st.length(); i++) {
+            res = res+DataStore.getValue(st.charAt(i));
+        }
+        return res;
     }
 }
