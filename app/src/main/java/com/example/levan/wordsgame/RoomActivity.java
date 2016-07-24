@@ -99,7 +99,7 @@ public class RoomActivity extends AppCompatActivity {
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 } else {
-                    gm.riseBid(0,false);
+                    gm.riseBid(0,true);
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 }

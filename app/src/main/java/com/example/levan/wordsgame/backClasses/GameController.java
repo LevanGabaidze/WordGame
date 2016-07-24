@@ -114,7 +114,6 @@ public class GameController  extends Thread {
         gmr.setScores(scores);
         gmr.setWinners(winners);
         // es davamate (rame tu auria)))
-        setMoney(winners);
         ArrayList<String> words=new ArrayList<>();
         for(int i=0;i<response.length;i++){
             words.add(response[i]);
@@ -168,6 +167,25 @@ public class GameController  extends Thread {
                 winners.add(i);
             }
         }
+
+        if(winners.size()==0){
+            for(int i=0;i<riseAccepted.length;i++){
+                if(riseAccepted[i]){
+                    winners.add(i);
+                }
+
+            }
+        }
+        if(winners.size()==0){
+            for(int i=0;i<nPlayer+1;i++){
+                if(!playersOut.contains(i)){
+                    winners.add(i);
+                }
+
+            }
+
+        }
+
         return  winners;
     }
 
