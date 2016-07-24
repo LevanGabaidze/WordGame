@@ -95,11 +95,11 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (callType) {
-                    gm.acceptBid(0);
+                    gm.acceptBid(0,true);
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 } else {
-                    gm.riseBid(0);
+                    gm.riseBid(0,false);
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 }
@@ -268,6 +268,9 @@ public class RoomActivity extends AppCompatActivity {
                finishHand(result);
                System.out.println("gameResult"+result.getWinners());
                System.out.println("es sityvebia: "+result.getWords());
+               break;
+           case DataStore.potUpdate:
+               //aq aaupdaten potssss
 
 
 
@@ -281,7 +284,7 @@ public class RoomActivity extends AppCompatActivity {
             ((TextView) (players.get(winner - 1).findViewById(R.id.oponent_message))).setText("Winner");
         }
             // aq Cemi fuli unda Sevcvalo
-            for (int i=0; i<result.getScores().size(); i++) {
+            for (int i=0; i<result.getScores().size()-1; i++) {
                 if (i==0) continue;
                 ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
             }
