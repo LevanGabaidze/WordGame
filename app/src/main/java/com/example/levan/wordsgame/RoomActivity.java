@@ -125,6 +125,7 @@ public class RoomActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 gm.setAnswer(0,myWord);
+                ok.setEnabled(false);
             }
         });
 
@@ -228,14 +229,12 @@ public class RoomActivity extends AppCompatActivity {
        switch (flag) {
            case DataStore.askAnswer:
                // am dros karti pirvelad darigda xeli
+               ok.setEnabled(true);
+               myWord = "";
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);
-               int mM = moneys.get(0);
-               myCurMoney.setText(mM+"$");
-               // aq chemi fulic unda vakotrolo
-               for (int i=1; i<moneys.size(); i++) {
-                   ((TextView) players.get(i).findViewById(R.id.money)).setText(moneys.get(i)+"$");
-               }
+               //int mM = moneys.get(0);
+               updateMoneys();
                composedWord.setText("dro CarTulia");
                for (int i=0; i<commonCard.length(); i++) {
                    cards.get(i).setEnabled(true);
@@ -278,7 +277,8 @@ public class RoomActivity extends AppCompatActivity {
         int winner = result.getWinners().get(0);
         myWord = "";
         if (winner == 0) composedWord.setText("You win!"); else {
-            ((TextView)(players.get(winner-1).findViewById(R.id.oponent_message))).setText("Winner");
+            ((TextView) (players.get(winner - 1).findViewById(R.id.oponent_message))).setText("Winner");
+        }
             // aq Cemi fuli unda Sevcvalo
             for (int i=0; i<result.getScores().size(); i++) {
                 if (i==0) continue;
@@ -289,9 +289,10 @@ public class RoomActivity extends AppCompatActivity {
                 ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(result.getWords().get(i)+"");
             }
             moneys = result.getMoney();
+            System.out.println("monnnneuiuyyyyyyyyy: "+moneys);
             clear.callOnClick();
 
-        }
+
 
 
     }

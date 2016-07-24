@@ -87,6 +87,9 @@ public class GameController  extends Thread {
             dealtCards.clear();
             Collections.shuffle(cards);
             pot=DataStore.bidSequence[curHand]*(nPlayer+1-playersOut.size());
+            for (int i=0; i<money.length; i++) {
+                money[i]-=DataStore.bidSequence[curHand];
+            }
             dealCards();
             System.out.println("darigda");
             suggestRise();
@@ -116,7 +119,7 @@ public class GameController  extends Thread {
         gmr.setScores(scores);
         gmr.setWinners(winners);
         // es davamate (rame tu auria)))
-      //  setMoney(winners);
+        setMoney(winners);
         ArrayList<String> words=new ArrayList<>();
         for(int i=0;i<response.length;i++){
             words.add(response[i]);
