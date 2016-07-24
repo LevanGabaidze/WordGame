@@ -82,9 +82,6 @@ public class RoomActivity extends AppCompatActivity {
         composedWord.setTypeface(type);
 
 
-
-
-
     }
 
     private void initButtons() {
@@ -102,7 +99,7 @@ public class RoomActivity extends AppCompatActivity {
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 } else {
-                    gm.riseBid(0,false);
+                    gm.riseBid(0,true);
                     moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 }
@@ -115,10 +112,13 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 // aq metodia gmshi shesacvleli bool ro gadaeces
                 if (callType) {
-                    //
-                   // gm.acceptBid(0);
+                    gm.acceptBid(0,false);
+                    moneys.set(0,moneys.get(0)-10);
+                    updateMoneys();
                 } else {
-                   // gm.riseBid(0);
+                    gm.riseBid(0,false);
+                    moneys.set(0,moneys.get(0)-10);
+                    updateMoneys();
                 }
                 playerBoard.setVisibility(View.INVISIBLE);
             }
@@ -245,11 +245,13 @@ public class RoomActivity extends AppCompatActivity {
                for (int i=0; i<commonCard.length(); i++) {
                    cards.get(i).setEnabled(true);
                    ((TextView)cards.get(i).findViewById(R.id.card_letter)).setText(commonCard.charAt(i)+"");
+                   ((TextView)cards.get(i).findViewById(R.id.card_score)).setText(DataStore.getValue(commonCard.charAt(i))+"");
                     cards.get(i).setVisibility(View.VISIBLE);
                }
                for (int i=0; i<playerCards.length(); i++) {
                    myCards.get(i).setEnabled(true);
                    ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setText(playerCards.charAt(i)+"");
+                   ((TextView)myCards.get(i).findViewById(R.id.card_score)).setText(DataStore.getValue(playerCards.charAt(i))+"");
                    myCards.get(i).setVisibility(View.VISIBLE);
                }
                System.out.println(commonCard+" chemi: "+playerCards);
