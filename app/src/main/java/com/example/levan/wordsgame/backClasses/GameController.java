@@ -113,6 +113,7 @@ public class GameController  extends Thread {
         GameResult gmr=new GameResult();
         gmr.setScores(scores);
         gmr.setWinners(winners);
+        setMoney(winners);
         // es davamate (rame tu auria)))
         ArrayList<String> words=new ArrayList<>();
         for(int i=0;i<response.length;i++){
@@ -253,11 +254,7 @@ public class GameController  extends Thread {
 
     private void dealCards() {
         String curCards="";
-        if(cards.size()<(DataStore.Card_Number+2*(nPlayer-playersOut.size()+1))) {
-            gameFinished=true;
-            notifyNoMoreCards();
-            interrupt();
-        }
+
         int darigebuli=0;
 
         for(int i=0;i<DataStore.Card_Number;i++){
@@ -298,9 +295,10 @@ public class GameController  extends Thread {
             money[i+1]-=DataStore.bidSequence[curHand];
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
-            ms.getData().putString(DataStore.sentStringKey,cardsTosend);
+            ms.getData().putString(DataStore.sentStringKey,DataStore.getMaxCards(cardsTosend));
             players.get(i).getmHanlder().sendMessage(ms);
         }
+
         Message potMs=new Message();
         potMs.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
         potMs.getData().putInt(DataStore.potUpdate,pot);
@@ -424,7 +422,7 @@ public class GameController  extends Thread {
 
     public void setMoney(ArrayList<Integer> winners) {
         for(int i=0;i<winners.size();i++){
-            money[i]+=pot/winners.size();
+            money[winners.get(i)]+=pot/winners.size();
         }
     }
 
