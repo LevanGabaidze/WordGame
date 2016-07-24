@@ -91,11 +91,8 @@ public class GameController  extends Thread {
                 money[i]-=DataStore.bidSequence[curHand];
             }
             dealCards();
-            System.out.println("darigda");
             suggestRise();
-            System.out.println("dareizda");
             askToAcceptRise();
-            System.out.println("gacalles");
             if(curHand<4) curHand+=1;
             evaluateResult();
             if(gameFinished){
@@ -109,6 +106,7 @@ public class GameController  extends Thread {
     }
 
     private void msgUItofinish() {
+
     }
 
     private void evaluateResult() {
@@ -158,7 +156,10 @@ public class GameController  extends Thread {
                 playersNowOut.add(i);
             }
         }
-        if((playersOut.size()==nPlayer+1)|| playersOut.contains(0)) gameFinished=true;
+        if((playersOut.size()==nPlayer+1)|| playersOut.contains(0)){
+            gameFinished=true;
+        }
+
         return  playersNowOut;
     }
 
@@ -211,7 +212,6 @@ public class GameController  extends Thread {
             if(playersOut.contains(i)) continue;
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askRise);
-            if(turnTorise==i){
                 if(i==0) {
                     mainPlayerHandler.sendMessage(ms);
                     lastSend=new Date().getTime();
@@ -231,10 +231,7 @@ public class GameController  extends Thread {
                 acceptRise[i]=false;
 
 
-            }
 
-            turnTorise+=1;
-            turnTorise=turnTorise%(nPlayer+1);
         }
 
     }
@@ -263,6 +260,8 @@ public class GameController  extends Thread {
             mPlayerHand+=cards.get(darigebuli).getCharacter();
             darigebuli++;
         }
+        pot+=DataStore.bidSequence[curHand];
+        money[0]-=DataStore.bidSequence[curHand];
         Message msgTomainActivity= new Message();
         msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
         msgTomainActivity.getData().putString(DataStore.commonCards,curCards);
@@ -280,12 +279,19 @@ public class GameController  extends Thread {
                 cardsTosend+=cards.get(darigebuli).getCharacter();
                darigebuli++;
             }
+            pot+=DataStore.bidSequence[curHand];
+            money[i+1]-=DataStore.bidSequence[curHand];
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askAnswer);
             ms.getData().putString(DataStore.sentStringKey,cardsTosend);
             players.get(i).getmHanlder().sendMessage(ms);
         }
+        Message potMs=new Message();
+        potMs.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
+        potMs.getData().putInt(DataStore.potUpdate,pot);
+        mainPlayerHandler.sendMessage(potMs);
         waitForAnswers();
+
 
     }
 
@@ -294,6 +300,7 @@ public class GameController  extends Thread {
         msgTomainActivity.getData().putString(DataStore.requestTypeFlag,DataStore.noMoreCards);
 
         mainPlayerHandler.sendMessage(msgTomainActivity);
+
     }
 
     private void waitForAnswers() {
@@ -333,8 +340,13 @@ public class GameController  extends Thread {
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
         mg.getData().putInt(DataStore.messageToUIRise,player);
-        pot+=DataStore.bidSequence[curHand];
-        money[player]-=DataStore.bidSequence[curHand];
+        pot+=10;
+        money[player]-=10;
+        mainPlayerHandler.sendMessage(mg);
+        Message ms=new Message();
+        ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
+        ms.getData().putInt(DataStore.potUpdate,pot);
+        mainPlayerHandler.sendMessage(ms);
     }
 
 
@@ -349,8 +361,12 @@ public class GameController  extends Thread {
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);
         mg.getData().putInt(DataStore.messageToUIRiseCalled,player);
         pot+=10;
+        mainPlayerHandler.sendMessage(mg);
         money[player]=money[player]-10;
-
+        Message ms=new Message();
+        ms.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
+        ms.getData().putInt(DataStore.potUpdate,pot);
+        mainPlayerHandler.sendMessage(ms);
     }
 
 
