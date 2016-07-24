@@ -46,7 +46,7 @@ public class OriginalAI {
         int n = str.length();
         if(!lx.startsWith(prefix)) return;
 
-        if(lx.isWord(prefix)){
+        if(lx.isWord(prefix) && prefix.length()>2){
             int value=evaluate(prefix);
             Word neW=new Word(prefix,value);
             words.add(neW);
