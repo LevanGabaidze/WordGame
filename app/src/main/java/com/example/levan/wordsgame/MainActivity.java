@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int np = getNp();
                 int diff;
-                if (easyDif.isChecked()) diff = 0; else diff = 1;
+                if (easyDif.isChecked()) diff = 1; else diff = 2;
                 Intent in = new Intent(c,RoomActivity.class);
                 in.putExtra("diff",diff);
                 in.putExtra("np",np);

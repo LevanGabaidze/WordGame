@@ -115,6 +115,8 @@ public class GameController  extends Thread {
         GameResult gmr=new GameResult();
         gmr.setScores(scores);
         gmr.setWinners(winners);
+        // es davamate (rame tu auria)))
+      //  setMoney(winners);
         ArrayList<String> words=new ArrayList<>();
         for(int i=0;i<response.length;i++){
             words.add(response[i]);

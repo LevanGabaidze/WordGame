@@ -109,22 +109,60 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:gravity="center"
+            android:orientation="vertical"
             android:paddingBottom="@dimen/medium_margin"
-            android:layout_weight="1">
+            android:layout_weight="1.2">
 
-            <include layout="@layout/card"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:id="@+id/crd8"
-                android:layout_margin="@dimen/medium_margin"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
 
-            <include layout="@layout/card"
-                android:layout_width="20dp"
-                android:layout_height="40dp"
-                android:id="@+id/crd9"
-                android:layout_margin="@dimen/medium_margin"
-                />
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:id="@+id/chips_icon"
+                    android:layout_gravity="bottom"
+                    android:layout_weight="2"
+                    android:src="@drawable/chips"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:id="@+id/pot_amount"
+                    android:gravity="center|top"
+                    android:text="100"/>
+
+            </LinearLayout>
+
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                >
+                <include layout="@layout/card"
+                    android:layout_width="20dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/crd8"
+                    android:layout_margin="@dimen/medium_margin"
+                    />
+
+                <include layout="@layout/card"
+                    android:layout_width="20dp"
+                    android:layout_height="40dp"
+                    android:id="@+id/crd9"
+                    android:layout_margin="@dimen/medium_margin"
+                    />
+
+
+            </LinearLayout>
+
 
 
         </LinearLayout>
@@ -134,15 +172,50 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_weight="0.1"
         android:orientation="horizontal"
-        android:layout_weight="0.7">
+        >
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/timer"
+            android:gravity="center"
+            android:text="time"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/my_cur_money"
+            android:gravity="center"
+            android:text="money: "/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:id="@+id/cur_possible_score"
+            android:gravity="center"
+            android:text="cur_score"/>
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:orientation="horizontal"
+        android:layout_weight="0.6">
 
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:layout_weight="2">
+        android:layout_weight="2.3">
 
         <TextView
             android:layout_width="wrap_content"
@@ -152,7 +225,7 @@
             android:layout_weight="3"
             android:layout_gravity="center"
             android:gravity="center"
-            android:textSize="40dp"
+            android:textSize="35dp"
             android:textAlignment="center"
             android:text="abcdef"
             />
@@ -196,15 +269,17 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_margin="@dimen/small_margin"
                 android:id="@+id/btn_clear"
                 android:text="Clear"
                 />
 
             <Button
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_width="70dp"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_margin="@dimen/small_margin"
                 android:id="@+id/btn_backspace"
                 android:background="@android:drawable/ic_input_delete"
@@ -212,7 +287,8 @@
 
             <Button
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:layout_margin="@dimen/small_margin"
                 android:id="@+id/btn_enter"
                 android:text="გაგზავნა"

@@ -40,9 +40,11 @@ public class RoomActivity extends AppCompatActivity {
     String myWord ="";
     boolean callType = false;
     Button clear, delete, ok, yes, no;
+    //int money;
     TextView composedWord;
     Typeface type;
     int numPlayers;
+    TextView myCurMoney, myCurScore;
     View playerBoard;
     ArrayList<Integer> moneys =  new ArrayList<>();
     int diff;
@@ -56,8 +58,10 @@ public class RoomActivity extends AppCompatActivity {
         setContentView(R.layout.game_room);
         type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
         numPlayers = getIntent().getIntExtra("np",1);
-        diff = getIntent().getIntExtra("diff",0);
+        diff = getIntent().getIntExtra("diff",1);
         lex = new MyLexicon();
+        myCurMoney = (TextView) findViewById(R.id.my_cur_money);
+        myCurScore =(TextView) findViewById(R.id.cur_possible_score);
         initCards();
         initPlayers();
         initButtons();
@@ -69,7 +73,7 @@ public class RoomActivity extends AppCompatActivity {
                 ReactOnMessage(msg);
             }
         };
-        InitialazieGame(2,1);
+        InitialazieGame(numPlayers,diff);
         composedWord = (TextView) findViewById(R.id.composed_text);
 
         composedWord.setTypeface(type);
@@ -92,8 +96,12 @@ public class RoomActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (callType) {
                     gm.acceptBid(0);
+                    moneys.set(0,moneys.get(0)-10);
+                    updateMoneys();
                 } else {
                     gm.riseBid(0);
+                    moneys.set(0,moneys.get(0)-10);
+                    updateMoneys();
                 }
                 playerBoard.setVisibility(View.INVISIBLE);
             }
@@ -162,6 +170,14 @@ public class RoomActivity extends AppCompatActivity {
 
     }
 
+    private void updateMoneys() {
+        for (int i=0; i<Math.min(numPlayers,moneys.size()); i++) {
+            if (i == 0) myCurMoney.setText(moneys.get(0)+"$"); else {
+                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i)+"$");
+            }
+        }
+    }
+
     private void enable(View v, boolean b) {
 
         if (b) v.setVisibility(View.VISIBLE);
@@ -214,6 +230,8 @@ public class RoomActivity extends AppCompatActivity {
                // am dros karti pirvelad darigda xeli
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);
+               int mM = moneys.get(0);
+               myCurMoney.setText(mM+"$");
                // aq chemi fulic unda vakotrolo
                for (int i=1; i<moneys.size(); i++) {
                    ((TextView) players.get(i).findViewById(R.id.money)).setText(moneys.get(i)+"$");
@@ -330,8 +348,6 @@ public class RoomActivity extends AppCompatActivity {
             pArray.get(i).start();
         }
         gm.start();
-
-
     }
 
 
