@@ -83,8 +83,8 @@ public class OriginalAI {
     }
 
     public int getRandomNumber(int n) {
-        int max=n/2;
-        int min=0;
+        int max=n/4*3;
+        int min=n/2;
         Random ra=new Random();
         int choice=ra.nextInt((max-min)+1) +min;
 

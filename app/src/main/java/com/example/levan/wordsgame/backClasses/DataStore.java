@@ -40,7 +40,7 @@ public  class  DataStore {
     public final static  String askRise="askForRise";
     public final static  String askToAccetptRise="askToAcceptRise";
     public final static  String sentStringKey="sentStringKey";
-    public final static  int Card_Number=5;
+    public final static  int Card_Number=7;
     public final static int startMoney=100;
     public final static int[] bidSequence= new int[]{10,20,30,40,50};
     private static HashMap<Character,Integer>  charMap;
@@ -83,4 +83,38 @@ public  class  DataStore {
 
     }
 
+    public static String getMaxCards(String cardsTosend) {
+        String  max="";
+        int maxValue=0;
+        int maxIndex=0;
+        for(int i=0;i<cardsTosend.length();i++){
+            if(getValue(cardsTosend.charAt(i))>maxValue){
+                maxValue=getValue(cardsTosend.charAt(i));
+                maxIndex=i;
+            }
+        }
+        if(maxIndex!=cardsTosend.length()){
+            cardsTosend=cardsTosend.substring(0,maxIndex)+cardsTosend.substring(maxIndex+1);
+
+        }else{
+            cardsTosend=cardsTosend.substring(0,maxIndex);
+        }
+         maxValue=0;
+         maxIndex=0;
+        for(int i=0;i<cardsTosend.length();i++){
+            if(getValue(cardsTosend.charAt(i))>maxValue){
+                maxValue=getValue(cardsTosend.charAt(i));
+                maxIndex=i;
+            }
+        }
+        if(maxIndex!=cardsTosend.length()){
+            cardsTosend=cardsTosend.substring(0,maxIndex)+cardsTosend.substring(maxIndex+1);
+
+        }else{
+            cardsTosend=cardsTosend.substring(0,maxIndex);
+        }
+
+
+        return  cardsTosend;
+    }
 }
