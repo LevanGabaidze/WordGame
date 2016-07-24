@@ -105,7 +105,14 @@ public class GameController  extends Thread {
     }
 
     private void msgUItofinish() {
-
+        try {
+            sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        Message ms = new Message();
+        ms.getData().putString(DataStore.requestTypeFlag,"fin");
+        mainPlayerHandler.sendMessage(ms);
     }
 
     private void evaluateResult() {
@@ -156,7 +163,7 @@ public class GameController  extends Thread {
                 playersNowOut.add(i);
             }
         }
-        if((playersOut.size()==nPlayer+1)|| playersOut.contains(0)){
+        if((playersOut.size()==nPlayer)|| playersOut.contains(0)){
             gameFinished=true;
         }
 
@@ -211,7 +218,7 @@ public class GameController  extends Thread {
                 players.get(i-1).getmHanlder().sendMessage(ms);
 
                 // es me davamate (tu auria )))
-              //  mainPlayerHandler.sendMessage(ms);
+                //  mainPlayerHandler.sendMessage(ms);
                 lastSend=new Date().getTime();
             }
             acceptCall[i]=true;
@@ -231,23 +238,23 @@ public class GameController  extends Thread {
             if(playersOut.contains(i)) continue;
             Message ms=new Message();
             ms.getData().putString(DataStore.requestTypeFlag,DataStore.askRise);
-                if(i==0) {
-                    mainPlayerHandler.sendMessage(ms);
-                    lastSend=new Date().getTime();
-                }else{
-                    Message mg=new Message();
-                    mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
-                    mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIAksedToRise);
-                    mg.getData().putInt(DataStore.messageToUIAksedToRise,i);
-                    mainPlayerHandler.sendMessage(mg);
-                    players.get(i-1).getmHanlder().sendMessage(ms);
-                    lastSend=new Date().getTime();
-                }
-                acceptRise[i]=true;
-                while((new Date().getTime()-lastSend)<15000){
-                    if(alreadyRised) return;
-                }
-                acceptRise[i]=false;
+            if(i==0) {
+                mainPlayerHandler.sendMessage(ms);
+                lastSend=new Date().getTime();
+            }else{
+                Message mg=new Message();
+                mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
+                mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIAksedToRise);
+                mg.getData().putInt(DataStore.messageToUIAksedToRise,i);
+                mainPlayerHandler.sendMessage(mg);
+                players.get(i-1).getmHanlder().sendMessage(ms);
+                lastSend=new Date().getTime();
+            }
+            acceptRise[i]=true;
+            while((new Date().getTime()-lastSend)<15000){
+                if(alreadyRised) return;
+            }
+            acceptRise[i]=false;
 
 
 
@@ -267,7 +274,7 @@ public class GameController  extends Thread {
         }
 
 
-       //deal to person
+        //deal to person
         String mPlayerHand="";
 
         for(int j=0; j<2;j++){
@@ -292,7 +299,7 @@ public class GameController  extends Thread {
             for(int j=darigebuli; j<2;j++){
                 dealtCards.add(cards.get(darigebuli));
                 cardsTosend+=cards.get(darigebuli).getCharacter();
-               darigebuli++;
+                darigebuli++;
             }
             pot+=DataStore.bidSequence[curHand];
             money[i+1]-=DataStore.bidSequence[curHand];
@@ -345,7 +352,7 @@ public class GameController  extends Thread {
 
     }
 
-   //es metodi unda gamoizaxos playerma an tvinma roca kitxavs gamecontrolleri xo ar ginda awioo,rigirigobit ekitxeba ra tipebs
+    //es metodi unda gamoizaxos playerma an tvinma roca kitxavs gamecontrolleri xo ar ginda awioo,rigirigobit ekitxeba ra tipebs
     public synchronized void   riseBid(int player,boolean answer){
         if(!acceptRise[player])
             return;

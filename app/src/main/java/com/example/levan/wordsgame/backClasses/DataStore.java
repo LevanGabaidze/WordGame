@@ -42,7 +42,7 @@ public  class  DataStore {
     public final static  String sentStringKey="sentStringKey";
     public final static  int Card_Number=7;
     public final static int startMoney=100;
-    public final static int[] bidSequence= new int[]{10,20,30,40,50};
+    public final static int[] bidSequence= new int[]{10,10,30,40,50};
     private static HashMap<Character,Integer>  charMap;
     private static ArrayList<Card> dasta;
 

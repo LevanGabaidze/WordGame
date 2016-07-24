@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.graphics.drawable.DrawerArrowDrawable;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
 
@@ -36,18 +37,21 @@ public class RoomActivity extends AppCompatActivity {
 
     ArrayList<View> cards;
     ArrayList<View> myCards;
+    boolean isLost, isLasstWin;
     ArrayList<View> players;
     ArrayList<View> chosenCards = new ArrayList<>();
     String myWord ="";
     boolean callType = false;
     TimerThread timer;
     Button clear, delete, ok, yes, no;
+    int countOut = 0;
     //int money;
     TextView composedWord;
     Typeface type;
     int numPlayers;
     TextView myCurMoney, myCurScore, curTime;
-    View playerBoard;
+    View playerBoard, pot;
+    TextView pot_value;
     ArrayList<Integer> moneys =  new ArrayList<>();
     int diff;
 
@@ -58,6 +62,7 @@ public class RoomActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.game_room);
+        //timer = new TimerThread(curTime,40);
         type = Typeface.createFromAsset(getAssets(),"fonts/acadnusx.ttf");
         numPlayers = getIntent().getIntExtra("np",1);
         diff = getIntent().getIntExtra("diff",1);
@@ -68,6 +73,8 @@ public class RoomActivity extends AppCompatActivity {
         initCards();
         initPlayers();
         initButtons();
+        pot = findViewById(R.id.pot_overall);
+        pot_value =(TextView) pot.findViewById(R.id.pot_amount);
         lex.InitializeLexicon(this);
         DataStore.createMap(this);
         myHandler=new Handler(){
@@ -258,6 +265,12 @@ public class RoomActivity extends AppCompatActivity {
                }
                System.out.println(commonCard+" chemi: "+playerCards);
                break;
+           case "fin":
+               System.out.println("interrrupppppppppppppppp");
+               Intent in = new Intent(this, MainActivity.class);
+               startActivity(in);
+               this.finish();
+                break;
            case DataStore.askRise:
                composedWord.setText("gsurT gazardoT fsoni?");
                timer.interrupt();
@@ -285,16 +298,34 @@ public class RoomActivity extends AppCompatActivity {
                System.out.println("es sityvebia: "+result.getWords());
                break;
            case DataStore.potUpdate:
-               //aq aaupdaten potssss
-
-
+               int potN = msg.getData().getInt(DataStore.potUpdate);
+               changePot(potN);
+               //
+               break;
 
        }
+    }
+
+    private void changePot(int potN) {
+        pot_value.setText(potN+"");
     }
 
     private void finishHand(GameResult result) {
         int winner = result.getWinners().get(0);
         timer.interrupt();
+        ArrayList<Integer> out = result.getPlayersNowOut();
+        for (int i=0; i<out.size(); i++) {
+            countOut++;
+            if (out.get(i)==0){
+                lost();
+                return;
+            }
+            players.get(out.get(i)-1).setVisibility(View.INVISIBLE);
+            if (countOut == numPlayers) {
+                winAllGame();
+                return;
+            }
+        }
         myWord = "";
         if (winner == 0) composedWord.setText("You win!"); else {
             ((TextView) (players.get(winner - 1).findViewById(R.id.oponent_message))).setText("Winner");
@@ -306,16 +337,29 @@ public class RoomActivity extends AppCompatActivity {
             }
             for (int i=0; i<result.getWords().size(); i++) {
                 if (i==0) continue;
-                ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(result.getWords().get(i)+"");
+                String st;
+                st = result.getWords().get(i);
+                if (st == null) st = "no word";
+                ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(st+"");
             }
             moneys = result.getMoney();
             updateMoneys();
-            System.out.println("monnnneuiuyyyyyyyyy: "+moneys);
             clear.callOnClick();
 
 
 
 
+    }
+
+    private void winAllGame() {
+        composedWord.setText("Tqven moigeT!");
+
+        isLasstWin = true;
+    }
+
+    private void lost() {
+        composedWord.setText("Tqven waageT");
+        isLost = true;
     }
 
 
@@ -334,23 +378,26 @@ public class RoomActivity extends AppCompatActivity {
                 player = msg.getData().getInt(DataStore.messageToUIAksedToAcceptRise);
                 System.out.println("kitxa" + player+" call tu ara");
                 if (player == 0) return;
-                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("thinking");
                 timer.interrupt();
                 break;
             case DataStore.messageToUIRiseCalled:
                 player = msg.getData().getInt(DataStore.messageToUIRiseCalled);
                 System.out.println(player+ " aman dacalla ");
+
                 if (player ==0) return;
-                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("called");
+                boolean bb =  msg.getData().getBoolean(DataStore.answerIs);
+                String st = "fold";
+                if (bb) st = "called";
+                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText(st);
                 timer.interrupt();
                 break;
             case DataStore.messageToUIRise:
                 player = msg.getData().getInt(DataStore.messageToUIRise);
-                //
                 boolean b = msg.getData().getBoolean(DataStore.answerIs);
                 System.out.println(player+ " aman daaraisa pirvelma");
                 if (player == 0) return;
-                ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("raised");
+                if (b)((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("raised");
                 timer.interrupt();
                 break;
         }

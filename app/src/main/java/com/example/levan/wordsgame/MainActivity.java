@@ -36,7 +36,7 @@ public class MainActivity extends AppCompatActivity {
     public int k=0;
     ArrayList<String> arr;
     Button play, multy, exit, begin, back;
-    RadioButton easyDif, np1, np2, np3;
+    RadioButton easyDif, np1, np2, np3, mediumDif;
     AppCompatActivity c;
 
 
@@ -47,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
         multy = (Button) findViewById(R.id.multiPlayer);
         begin = (Button) findViewById(R.id.begin_game);
         easyDif = (RadioButton) findViewById(R.id.diff_lvl1);
+        mediumDif = (RadioButton) findViewById(R.id.diff_lvl2);
         np1 = (RadioButton) findViewById(R.id.oponent_q1);
         np2 = (RadioButton) findViewById(R.id.oponent_q2);
         np3 = (RadioButton) findViewById(R.id.oponent_q3);
@@ -56,7 +57,13 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 int np = getNp();
                 int diff;
-                if (easyDif.isChecked()) diff = 1; else diff = 2;
+                if (easyDif.isChecked()) {
+                    diff = 1;
+                } else if(mediumDif.isChecked()) {
+                    diff = 2;
+                } else {
+                    diff = 3;
+                }
                 Intent in = new Intent(c,RoomActivity.class);
                 in.putExtra("diff",diff);
                 in.putExtra("np",np);

@@ -36,7 +36,7 @@ public class OriginalAI {
         if(words.size()==0) return "";
         Collections.sort(words);
         int choice=getRandomNumber(words.size());
-        return words.get(choice).str;
+        return words.get(choice-1).str;
     }
 
 
