@@ -26,6 +26,7 @@ import com.example.levan.wordsgame.backClasses.Player;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by Nodar.Kviraia on 7/21/2016.
@@ -39,12 +40,13 @@ public class RoomActivity extends AppCompatActivity {
     ArrayList<View> chosenCards = new ArrayList<>();
     String myWord ="";
     boolean callType = false;
+    TimerThread timer;
     Button clear, delete, ok, yes, no;
     //int money;
     TextView composedWord;
     Typeface type;
     int numPlayers;
-    TextView myCurMoney, myCurScore;
+    TextView myCurMoney, myCurScore, curTime;
     View playerBoard;
     ArrayList<Integer> moneys =  new ArrayList<>();
     int diff;
@@ -62,6 +64,7 @@ public class RoomActivity extends AppCompatActivity {
         lex = new MyLexicon();
         myCurMoney = (TextView) findViewById(R.id.my_cur_money);
         myCurScore =(TextView) findViewById(R.id.cur_possible_score);
+        curTime =(TextView) findViewById(R.id.timer);
         initCards();
         initPlayers();
         initButtons();
@@ -210,13 +213,13 @@ public class RoomActivity extends AppCompatActivity {
         cards.add(findViewById(R.id.crd3));
         cards.add(findViewById(R.id.crd4));
         cards.add(findViewById(R.id.crd5));
-        cards.add(findViewById(R.id.crd6));
-        cards.add(findViewById(R.id.crd7));
+       //// cards.add(findViewById(R.id.crd6));
+       // cards.add(findViewById(R.id.crd7));
         myCards.add(findViewById(R.id.crd8));
         myCards.add(findViewById(R.id.crd9));
         for (int i=0; i<cards.size(); i++) {
             ((TextView)cards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
-            if (i>4) cards.get(i).setVisibility(View.GONE);
+          //  if (i>4) cards.get(i).setVisibility(View.GONE);
         }
         for (int i=0; i<myCards.size(); i++) {
             ((TextView)myCards.get(i).findViewById(R.id.card_letter)).setTypeface(type);
@@ -237,6 +240,8 @@ public class RoomActivity extends AppCompatActivity {
                //int mM = moneys.get(0);
                updateMoneys();
                composedWord.setText("dro CarTulia");
+               timer = new TimerThread(curTime,40);
+               timer.start();
                for (int i=0; i<commonCard.length(); i++) {
                    cards.get(i).setEnabled(true);
                    ((TextView)cards.get(i).findViewById(R.id.card_letter)).setText(commonCard.charAt(i)+"");
@@ -251,6 +256,9 @@ public class RoomActivity extends AppCompatActivity {
                break;
            case DataStore.askRise:
                composedWord.setText("gsurT gazardoT fsoni?");
+               timer.interrupt();
+               timer = new TimerThread(curTime,15);
+               timer.start();
                playerBoard.setVisibility(View.VISIBLE);
                callType = false;
                break;
@@ -259,6 +267,9 @@ public class RoomActivity extends AppCompatActivity {
                callType = true;
                playerBoard.setVisibility(View.VISIBLE);
                composedWord.setText("asworebT Tu ara fsons?");
+               timer.interrupt();
+               timer = new TimerThread(curTime,15);
+               timer.start();
                break;
            case DataStore.graphicRequest:
                changeGameGraphics(msg);
@@ -276,6 +287,7 @@ public class RoomActivity extends AppCompatActivity {
 
     private void finishHand(GameResult result) {
         int winner = result.getWinners().get(0);
+        timer.interrupt();
         myWord = "";
         if (winner == 0) composedWord.setText("You win!"); else {
             ((TextView) (players.get(winner - 1).findViewById(R.id.oponent_message))).setText("Winner");
@@ -309,24 +321,28 @@ public class RoomActivity extends AppCompatActivity {
                 System.out.println(player+" vkitxe raisi");
                 if (player == 0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
+                timer.interrupt();
                 break;
             case DataStore.messageToUIAksedToAcceptRise:
                 player = msg.getData().getInt(DataStore.messageToUIAksedToAcceptRise);
                 System.out.println("kitxa" + player+" call tu ara");
                 if (player == 0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("waiting");
+                timer.interrupt();
                 break;
             case DataStore.messageToUIRiseCalled:
                 player = msg.getData().getInt(DataStore.messageToUIRiseCalled);
                 System.out.println(player+ " aman dacalla ");
                 if (player ==0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("called");
+                timer.interrupt();
                 break;
             case DataStore.messageToUIRise:
                 player = msg.getData().getInt(DataStore.messageToUIRise);
                 System.out.println(player+ " aman daaraisa pirvelma");
                 if (player == 0) return;
                 ((TextView)players.get(player-1).findViewById(R.id.oponent_message)).setText("raised");
+                timer.interrupt();
                 break;
         }
 
@@ -366,5 +382,43 @@ public class RoomActivity extends AppCompatActivity {
                 chosenCards.add(view);
             }
         });
+    }
+
+    private class TimerThread extends Thread {
+        TextView timer;
+        int count = 0;
+        int secs;
+
+        public TimerThread(TextView v, int sec) {
+            timer = v;
+            secs = sec;
+        }
+        @Override
+        public void run() {
+            super.run();
+            while (count<secs) {
+                if(isInterrupted()) return;
+                try {
+                    sleep(1000);
+                } catch (InterruptedException e) {
+                    return;
+                    //e.printStackTrace();
+                }
+                count++;
+                timer.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            timer.setText(count+ "s");
+                        }
+                    });
+            }
+            timer.post(new Runnable() {
+                @Override
+                public void run() {
+                    timer.setText("time up");
+                }
+
+            });
+        }
     }
 }
