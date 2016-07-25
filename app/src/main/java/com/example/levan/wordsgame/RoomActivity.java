@@ -213,7 +213,7 @@ public class RoomActivity extends AppCompatActivity {
     private void updateMoneys() {
         for (int i=0; i<Math.min(numPlayers,moneys.size()); i++) {
             if (i == 0) myCurMoney.setText(moneys.get(0)+"$"); else {
-                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i-1)+"$");
+                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i)+"$");
             }
         }
     }
