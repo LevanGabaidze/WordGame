@@ -36,7 +36,7 @@ public class OriginalAI {
         if(words.size()==0) return "";
         Collections.sort(words);
         int choice=getRandomNumber(words.size());
-        return words.get(choice-1).str;
+        return words.get(choice).str;
     }
 
 
@@ -86,7 +86,7 @@ public class OriginalAI {
         int max=n/4*3;
         int min=n/2;
         Random ra=new Random();
-        int choice=ra.nextInt((max-min)+1) +min;
+        int choice=ra.nextInt((max-min)) +min;
 
         return choice;
     }

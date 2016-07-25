@@ -18,7 +18,7 @@ public class MediumAI extends OriginalAI {
         int max=n;
         int min=n/4*3;
         Random ra=new Random();
-        int choice=ra.nextInt((max-min)+1) +min;
+        int choice=ra.nextInt((max-min)) +min;
         return choice;
     }
 

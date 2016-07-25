@@ -142,11 +142,11 @@ public class RoomActivity extends AppCompatActivity {
                 // aq metodia gmshi shesacvleli bool ro gadaeces
                 if (callType) {
                     gm.acceptBid(0,false);
-                    moneys.set(0,moneys.get(0)-10);
+                //    moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 } else {
                     gm.riseBid(0,false);
-                    moneys.set(0,moneys.get(0)-10);
+                  //  moneys.set(0,moneys.get(0)-10);
                     updateMoneys();
                 }
                 playerBoard.setVisibility(View.INVISIBLE);
@@ -156,7 +156,12 @@ public class RoomActivity extends AppCompatActivity {
         ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                gm.setAnswer(0,myWord);
+                if(lex.isWord(myWord)){
+                    gm.setAnswer(0,myWord);
+
+                }else{
+                    gm.setAnswer(0,"");
+                }
                 ok.setEnabled(false);
             }
         });
@@ -208,7 +213,7 @@ public class RoomActivity extends AppCompatActivity {
     private void updateMoneys() {
         for (int i=0; i<Math.min(numPlayers,moneys.size()); i++) {
             if (i == 0) myCurMoney.setText(moneys.get(0)+"$"); else {
-                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i)+"$");
+                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i-1)+"$");
             }
         }
     }

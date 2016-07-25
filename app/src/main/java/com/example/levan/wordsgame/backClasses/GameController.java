@@ -100,6 +100,7 @@ public class GameController  extends Thread {
             }
 
 
+
         }
 
     }
@@ -345,6 +346,7 @@ public class GameController  extends Thread {
     public synchronized void   setAnswer(int player,String answer){
         if((new Date().getTime()-staredWaiting)>40000)
             return;
+
 
         responseGiven[player]=true;
         response[player]=answer;
