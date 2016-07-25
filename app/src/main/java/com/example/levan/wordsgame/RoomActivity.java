@@ -211,12 +211,21 @@ public class RoomActivity extends AppCompatActivity {
     }
 
     private void updateMoneys() {
+
         for (int i=0; i<Math.min(numPlayers,moneys.size()); i++) {
-            if (i == 0) myCurMoney.setText(moneys.get(0)+"$"); else {
-                ((TextView) players.get(i-1).findViewById(R.id.money)).setText(moneys.get(i)+"$");
+            if (i == 0) {
+                myCurMoney.setText(moneys.get(0) + "$");
+            } else {
+                ((TextView) players.get(i - 1).findViewById(R.id.money)).setText(moneys.get(i) + "$");
             }
         }
     }
+
+
+
+
+
+
 
     private void enable(View v, boolean b) {
 
@@ -360,7 +369,9 @@ public class RoomActivity extends AppCompatActivity {
             // aq Cemi fuli unda Sevcvalo
             for (int i=0; i<result.getScores().size()-1; i++) {
                 if (i==0) continue;
-                ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
+                if (result.getScores().get(i) != null) {
+                    ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
+                }
             }
             for (int i=0; i<result.getWords().size(); i++) {
                 if (i==0) continue;

@@ -45,6 +45,7 @@ public  class  DataStore {
     public final static int[] bidSequence= new int[]{10,10,30,40,50};
     private static HashMap<Character,Integer>  charMap;
     private static ArrayList<Card> dasta;
+    public final static String moneyUpdate="asktoUpdateMoney";
 
 
     public static void createMap(Context con){

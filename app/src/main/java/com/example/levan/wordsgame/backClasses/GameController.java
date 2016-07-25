@@ -203,6 +203,7 @@ public class GameController  extends Thread {
 
     private void askToAcceptRise() {
         long lastSend;
+        if(!alreadyRised) return;
         for(int i=0;i<nPlayer+1;i++){
             if(playersOut.contains(i) || bidRisen[i]==true ) continue;
             Message ms=new Message();
@@ -313,6 +314,7 @@ public class GameController  extends Thread {
         Message potMs=new Message();
         potMs.getData().putString(DataStore.requestTypeFlag,DataStore.potUpdate);
         potMs.getData().putInt(DataStore.potUpdate,pot);
+        potMs.getData().putSerializable(DataStore.moneyUpdate,money);
         mainPlayerHandler.sendMessage(potMs);
         waitForAnswers();
 
@@ -367,7 +369,7 @@ public class GameController  extends Thread {
 
         bidRisen[player]=answer;
         riseAccepted[player]=answer;
-        alreadyRised=true;
+        alreadyRised=answer;
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
@@ -446,5 +448,10 @@ public class GameController  extends Thread {
 
     public synchronized int getCurrentRound() {
         return curHand;
+    }
+
+    public int[] getMoneyForNow(){
+        return money;
+
     }
 }
