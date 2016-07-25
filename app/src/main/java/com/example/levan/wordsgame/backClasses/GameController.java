@@ -334,7 +334,12 @@ public class GameController  extends Thread {
         while((new Date().getTime()-staredWaiting)<=40000){
             boolean cheker=true;
             for(int i=0;i<responseGiven.length;i++){
-                cheker=(cheker&&responseGiven[i]);
+                if(playersOut.contains(i)){
+                    cheker=cheker;
+                }else{
+                    cheker=(cheker&&responseGiven[i]);
+
+                }
 
             }
             if(cheker) break;
