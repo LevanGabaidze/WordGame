@@ -371,7 +371,7 @@ public class RoomActivity extends AppCompatActivity {
             for (int i=0; i<result.getScores().size()-1; i++) {
                 if (i==0) continue;
                 if (result.getScores().get(i) != null) {
-                    ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
+                   // ((TextView)players.get(i-1).findViewById(R.id.money)).setText(result.getScores().get(i)+" pnt");
                 }
             }
             for (int i=0; i<result.getWords().size(); i++) {
