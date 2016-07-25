@@ -161,6 +161,8 @@ public class RoomActivity extends AppCompatActivity {
 
                 }else{
                     gm.setAnswer(0,"");
+                    System.out.println("avoeeeeeeeeeeeeeeeeeee");
+                    composedWord.setText("es sityva ar arsebobs");
                 }
                 ok.setEnabled(false);
             }
@@ -212,7 +214,7 @@ public class RoomActivity extends AppCompatActivity {
 
     private void updateMoneys() {
 
-        for (int i=0; i<Math.min(numPlayers,moneys.size()); i++) {
+        for (int i=0; i<moneys.size(); i++) {
             if (i == 0) {
                 myCurMoney.setText(moneys.get(0) + "$");
             } else {
@@ -351,11 +353,10 @@ public class RoomActivity extends AppCompatActivity {
         timer.interrupt();
         ArrayList<Integer> out = result.getPlayersNowOut();
         for (int i=0; i<out.size(); i++) {
+            if (out.get(i)==0) lost();
+        }
+        for (int i=0; i<out.size(); i++) {
             countOut++;
-            if (out.get(i)==0){
-                lost();
-                return;
-            }
             players.get(out.get(i)-1).setVisibility(View.INVISIBLE);
             if (countOut == numPlayers) {
                 winAllGame();
@@ -363,7 +364,7 @@ public class RoomActivity extends AppCompatActivity {
             }
         }
         myWord = "";
-        if (winner == 0) composedWord.setText("You win!"); else {
+        if (winner == 0){ composedWord.setText("You win!");} else {
             ((TextView) (players.get(winner - 1).findViewById(R.id.oponent_message))).setText("Winner");
         }
             // aq Cemi fuli unda Sevcvalo
@@ -374,6 +375,7 @@ public class RoomActivity extends AppCompatActivity {
                 }
             }
             for (int i=0; i<result.getWords().size(); i++) {
+                if (i==0 && "".equals(result.getWords().get(i)))  System.out.println("wrooonnngggg worrrrdddd");
                 if (i==0) continue;
                 String st;
                 st = result.getWords().get(i);
@@ -381,8 +383,9 @@ public class RoomActivity extends AppCompatActivity {
                 ((TextView)players.get(i-1).findViewById(R.id.oponent_message)).setText(st+"");
             }
             moneys = result.getMoney();
-            updateMoneys();
+
             clear.callOnClick();
+            updateMoneys();
 
 
 

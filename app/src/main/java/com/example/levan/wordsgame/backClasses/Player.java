@@ -56,12 +56,22 @@ public class Player extends Thread {
     private void acceptRise() {
         if(ai.acceptRise()){
 
-            SystemClock.sleep(4000);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             gm.acceptBid(myNumber,true);
             setMoney( money-10);
 
         }else{
-            SystemClock.sleep(4000);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
             gm.acceptBid(myNumber,false);
 
         }
@@ -69,12 +79,21 @@ public class Player extends Thread {
 
     private void rise() {
         if(ai.riseOrNot()){
-            SystemClock.sleep(4000);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
 
             gm.riseBid(myNumber,true);
             setMoney(money-DataStore.bidSequence[gm.getCurrentRound()]);
         }else{
-            SystemClock.sleep(4000);
+            try {
+                sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
 
             gm.riseBid(myNumber,false);
 

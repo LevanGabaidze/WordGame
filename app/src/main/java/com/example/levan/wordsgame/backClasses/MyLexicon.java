@@ -106,7 +106,7 @@ public class MyLexicon implements Serializable {
     }
 
     public boolean isWord(String word){
-
+        if ("".equals(word)) return false;
         LexiconStructure curRoot=lexiconRoot;
         for(int i=0;i<word.length();i++){
             LexiconStructure curStruc=new LexiconStructure(i+1,word.charAt(i),false);
