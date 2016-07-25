@@ -33,6 +33,7 @@ public class MediumAI extends OriginalAI {
     public boolean riseOrNot() {
         Random ra=new Random();
         int choice=ra.nextInt((10-0)+1);
+
         return choice<5;
     }
 }

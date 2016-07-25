@@ -2,6 +2,7 @@ package com.example.levan.wordsgame.backClasses;
 
 import android.os.Handler;
 import android.os.Message;
+import android.os.SystemClock;
 import android.provider.ContactsContract;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class GameController  extends Thread {
     private int pot;
     private int[] money;
     boolean [] called;
+    boolean [] rised;
 
 
 
@@ -67,6 +69,7 @@ public class GameController  extends Thread {
         playersOut=new HashSet<>();
         curHand=0;
         called = new boolean[nPlayer+1];
+        rised=new boolean[nPlayer+1];
         pot=0;
 
     }
@@ -107,7 +110,7 @@ public class GameController  extends Thread {
 
     private void msgUItofinish() {
         try {
-            sleep(3000);
+            sleep(5000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -133,6 +136,7 @@ public class GameController  extends Thread {
             riseAccepted[i]=false;
             bidRisen[i]=false;
             called[i] = false;
+            rised[i]=false;
         }
         ArrayList<Integer> moneys=new ArrayList<>();
 
@@ -254,7 +258,7 @@ public class GameController  extends Thread {
             }
             acceptRise[i]=true;
             while((new Date().getTime()-lastSend)<15000){
-                if(alreadyRised) return;
+                if(rised[i]) return;
             }
             acceptRise[i]=false;
 
@@ -370,6 +374,8 @@ public class GameController  extends Thread {
         bidRisen[player]=answer;
         riseAccepted[player]=answer;
         alreadyRised=answer;
+        rised[player]=true;
+
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRise);
@@ -397,6 +403,10 @@ public class GameController  extends Thread {
 
         riseAccepted[player]=answer;
         called[player] = true;
+
+        long pause=new Date().getTime();
+
+
         Message mg=new Message();
         mg.getData().putString(DataStore.requestTypeFlag,DataStore.graphicRequest);
         mg.getData().putString(DataStore.graphicRequest,DataStore.messageToUIRiseCalled);
@@ -411,6 +421,7 @@ public class GameController  extends Thread {
             ms.getData().putInt(DataStore.potUpdate,pot);
             mainPlayerHandler.sendMessage(ms);
         }
+
 
     }
 

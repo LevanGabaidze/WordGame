@@ -3,6 +3,7 @@ package com.example.levan.wordsgame.backClasses;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.os.SystemClock;
 
 /**
  * Created by levan on 7/20/2016.
@@ -54,20 +55,13 @@ public class Player extends Thread {
 
     private void acceptRise() {
         if(ai.acceptRise()){
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+
+            SystemClock.sleep(4000);
             gm.acceptBid(myNumber,true);
             setMoney( money-10);
 
         }else{
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            SystemClock.sleep(4000);
             gm.acceptBid(myNumber,false);
 
         }
@@ -75,19 +69,13 @@ public class Player extends Thread {
 
     private void rise() {
         if(ai.riseOrNot()){
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            SystemClock.sleep(4000);
+
             gm.riseBid(myNumber,true);
             setMoney(money-DataStore.bidSequence[gm.getCurrentRound()]);
         }else{
-            try {
-                sleep(2000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+            SystemClock.sleep(4000);
+
             gm.riseBid(myNumber,false);
 
         }
