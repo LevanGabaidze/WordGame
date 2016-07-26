@@ -76,18 +76,26 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center_horizontal"
             android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:src="@drawable/title"
+                android:layout_marginTop="70dp"
+                android:layout_marginBottom="40dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Plese choose number of oponents:"
+                android:text="Number of oponents:"
                 android:layout_margin="@dimen/medium_margin"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
                 android:orientation="horizontal"
-
+                android:gravity="center"
                 android:layout_height="50dp">
 
                 <android.support.v7.widget.AppCompatRadioButton
@@ -115,11 +123,12 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="please choose difficulty: "
+                android:text="Difficulty level: "
                 android:layout_margin="@dimen/medium_margin"/>
 
             <RadioGroup
                 android:layout_width="match_parent"
+                android:gravity="center"
                 android:layout_height="50dp"
                 android:orientation="horizontal">
 
@@ -149,6 +158,8 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
+                android:layout_marginTop="70dp"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <Button

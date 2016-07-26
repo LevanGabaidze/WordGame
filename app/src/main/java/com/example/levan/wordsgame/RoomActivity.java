@@ -123,6 +123,7 @@ public class RoomActivity extends AppCompatActivity {
         yes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                composedWord.setText("");
                 if (callType) {
                     gm.acceptBid(0,true);
                     moneys.set(0,moneys.get(0)-10);
@@ -139,6 +140,7 @@ public class RoomActivity extends AppCompatActivity {
         no.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                composedWord.setText("");
                 // aq metodia gmshi shesacvleli bool ro gadaeces
                 if (callType) {
                     gm.acceptBid(0,false);
@@ -163,6 +165,7 @@ public class RoomActivity extends AppCompatActivity {
                     gm.setAnswer(0,"");
                     System.out.println("avoeeeeeeeeeeeeeeeeeee");
                     composedWord.setText("es sityva ar arsebobs");
+                    enableButtons(false);
                 }
                 ok.setEnabled(false);
             }
@@ -210,6 +213,12 @@ public class RoomActivity extends AppCompatActivity {
 
 
 
+    }
+
+    private void enableButtons(boolean b) {
+        delete.setEnabled(b);
+        ok.setEnabled(b);
+        clear.setEnabled(b);
     }
 
     private void updateMoneys() {
@@ -280,7 +289,7 @@ public class RoomActivity extends AppCompatActivity {
        switch (flag) {
            case DataStore.askAnswer:
                // am dros karti pirvelad darigda xeli
-               ok.setEnabled(true);
+               enableButtons(true);
                myWord = "";
                String commonCard = msg.getData().getString(DataStore.commonCards);
                String playerCards = msg.getData().getString(DataStore.playerCards);

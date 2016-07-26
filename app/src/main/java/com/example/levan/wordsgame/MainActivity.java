@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
     Button play, multy, exit, begin, back;
     RadioButton easyDif, np1, np2, np3, mediumDif;
     AppCompatActivity c;
-
+    ViewAnimator an;
 
     private void initButtons() {
         back = (Button) findViewById(R.id.back_btn);
@@ -72,6 +72,20 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onBackPressed();
+            }
+        });
+
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                an.showPrevious();
+            }
+        });
+
 
     }
 
@@ -84,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
         h = new Handler();
         c=this;
         initButtons();
-        final ViewAnimator an = (ViewAnimator) findViewById(R.id.animator);
+        an = (ViewAnimator) findViewById(R.id.animator);
         final CircularProgressView load = (CircularProgressView) findViewById(R.id.progress_view);
         play =(Button) findViewById(R.id.start_play);
         play.setOnClickListener(new View.OnClickListener() {
