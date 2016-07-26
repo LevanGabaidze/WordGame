@@ -57,14 +57,12 @@
                     android:id="@+id/op1"
                     />
 
-
                 <include layout="@layout/oponent"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:id="@+id/op2"
                     />
-
 
                 <include layout="@layout/oponent"
                     android:layout_width="0dp"

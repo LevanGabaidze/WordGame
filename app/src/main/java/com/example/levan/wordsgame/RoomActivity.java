@@ -509,19 +509,18 @@ public class RoomActivity extends AppCompatActivity {
             super.run();
             while (count>0) {
                 if(isInterrupted()) return;
+                timer.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        timer.setText(count+ " s");
+                    }
+                });
                 try {
                     sleep(1000);
                 } catch (InterruptedException e) {
                     return;
-                    //e.printStackTrace();
                 }
                 count--;
-                timer.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            timer.setText(count+ "s");
-                        }
-                    });
             }
             timer.post(new Runnable() {
                 @Override
