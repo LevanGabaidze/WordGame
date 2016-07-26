@@ -362,7 +362,10 @@ public class RoomActivity extends AppCompatActivity {
         timer.interrupt();
         ArrayList<Integer> out = result.getPlayersNowOut();
         for (int i=0; i<out.size(); i++) {
-            if (out.get(i)==0) lost();
+            if (out.get(i)==0) {
+                lost();
+                return;
+            }
         }
         for (int i=0; i<out.size(); i++) {
             countOut++;
